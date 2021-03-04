@@ -24,7 +24,9 @@ public class ClientHandler extends Thread{
         out = new PrintWriter(connectionSocket.getOutputStream());
     }
 
-    public void sendMessage(){}
+    public void sendMessage(){
+
+    }
 
     public void setID(String id){
 
