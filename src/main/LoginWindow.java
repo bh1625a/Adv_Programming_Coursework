@@ -89,7 +89,7 @@ public class LoginWindow {
 
 }
 
-
+// Former Test Code for LoginWindow
 // public static void main(String[] args) {
 // JFrame frame = new JFrame("App");
 // frame.setContentPane(new LoginGUI().getPanel());
