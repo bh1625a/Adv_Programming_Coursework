@@ -27,11 +27,15 @@ public class Client extends Thread {
     }
 
     public void run(){
+        openLoginWindow();
 
     }
 
     public void openLoginWindow(){
         /* This will open a Login Window GUI*/
+        loginWindow = new LoginWindow(this);
+        loginWindow.openWindow();
+
 
     }
 
@@ -74,8 +78,8 @@ public class Client extends Thread {
         return serverAddress;
     }
 
-    public void setServerPort(int serverPort) {
-        this.serverPort = serverPort;
+    public void setServerPort(String serverPort) {
+        this.serverPort = Integer.valueOf(serverPort);
     }
 
     public int getServerPort() {
