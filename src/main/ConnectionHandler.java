@@ -30,11 +30,16 @@ public class ConnectionHandler extends Thread {
                 String clientIP = connection.getInetAddress().getHostName();
                 int clientPort = connection.getPort();
 
-                System.out.println("New Client IP: " + clientIP);
-                System.out.println("Client Port: " + clientPort);
+                System.out.println("New Client IP: " + clientIP + ", Client Port: " + clientPort);
 
                 ClientHandler initiateConnection = new ClientHandler(this, connection);
 
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                serverSocket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
