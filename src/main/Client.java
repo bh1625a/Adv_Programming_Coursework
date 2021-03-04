@@ -2,6 +2,7 @@ package main;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -15,10 +16,12 @@ public class Client extends Thread {
 
     private int serverPort;
     private String serverAddress;
+    private int clientPort;
+    private String clientAddress;
+
 
     private Scanner in;
     private PrintWriter out;
-
 
 
     public Client(ClientHelper clientHelper){
@@ -35,8 +38,10 @@ public class Client extends Thread {
         /* This will open a Login Window GUI*/
         loginWindow = new LoginWindow(this);
         loginWindow.openWindow();
+    }
 
-
+    public void closeLoginWindow(){
+        loginWindow.closeWindow();
     }
 
     public void openChatWindow(){
@@ -45,13 +50,11 @@ public class Client extends Thread {
     }
 
     public void connectToServer() throws IOException {
-        socket = new Socket(this.getServerAddress(), this.getServerPort());
+        socket = new Socket(this.getServerAddress(), this.getServerPort(), InetAddress.getByName(this.getClientAddress()), this.getClientPort());
         out = new PrintWriter(socket.getOutputStream());
         in = new Scanner(socket.getInputStream());
         setIsConnected(true);
-        // CLOSE THE LOGIN WINDOW
-
-
+        closeLoginWindow();
     }
 
     public void setIsConnected(boolean value){
@@ -84,5 +87,21 @@ public class Client extends Thread {
 
     public int getServerPort() {
         return serverPort;
+    }
+
+    public void setClientAddress(String address){
+        this.clientAddress = address;
+    }
+
+    public String getClientAddress(){
+        return this.clientAddress;
+    }
+
+    public void setClientPort(String clientPort) {
+        this.clientPort = Integer.valueOf(clientPort);
+    }
+
+    public int getClientPort() {
+        return clientPort;
     }
 }

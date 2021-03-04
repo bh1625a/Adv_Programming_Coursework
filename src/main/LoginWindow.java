@@ -13,6 +13,7 @@ public class LoginWindow {
     private JButton connectButton;
     private JPanel OuterPanel;
     private Client client;
+    private JFrame frame = new JFrame("Login");
 
     public LoginWindow() {
     }
@@ -24,18 +25,30 @@ public class LoginWindow {
         connectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                client.setServerPort(serverPortInput.getText());
+                try {
+                    client.setServerPort(serverPortInput.getText());
+                    client.setServerAddress(serverIPInput.getText());
+                    client.setClientPort(clientPortInput.getText());
+                    client.setClientAddress(clientIPInput.getText());
+                    client.connectToServer();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
 
             }
         });
     }
 
     public void openWindow(){
-        JFrame frame = new JFrame("Login");
         frame.setContentPane(getPanel());
         frame.pack();
         frame.setVisible(true);
 
+    }
+
+    public void closeWindow(){
+        frame.setVisible(false);
+        frame.dispose();
     }
 
     public JPanel getPanel() {
