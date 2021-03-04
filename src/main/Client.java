@@ -1,7 +1,9 @@
 package main;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client extends Thread {
     private LoginWindow loginWindow;
@@ -9,9 +11,14 @@ public class Client extends Thread {
     private Socket socket;
     private ClientHelper clientHelper;
     private boolean isConnected = false;
+    private boolean isCoordinator = false;
 
     private int serverPort;
     private String serverAddress;
+
+    private Scanner in;
+    private PrintWriter out;
+
 
 
     public Client(ClientHelper clientHelper){
@@ -24,19 +31,27 @@ public class Client extends Thread {
     }
 
     public void openLoginWindow(){
+        /* This will open a Login Window GUI*/
 
     }
 
     public void openChatWindow(){
+        /* This will open the Chat Window GUI*/
 
     }
 
-    public void connectToServer(){
+    public void connectToServer() throws IOException {
+        socket = new Socket(this.getServerAddress(), this.getServerPort());
+        out = new PrintWriter(socket.getOutputStream());
+        in = new Scanner(socket.getInputStream());
+        setIsConnected(true);
+        // CLOSE THE LOGIN WINDOW
+
 
     }
 
-    public void setIsConnected(){
-
+    public void setIsConnected(boolean value){
+        isConnected = value;
     }
 
     public boolean isConnected(){
