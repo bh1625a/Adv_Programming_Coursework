@@ -15,8 +15,6 @@ public class LoginWindow {
     private Client client;
     private JFrame frame = new JFrame("Login");
 
-    public LoginWindow() {
-    }
 
     public LoginWindow(Client client) {
         this.client = client;
@@ -25,15 +23,21 @@ public class LoginWindow {
         connectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    client.setServerPort(serverPortInput.getText());
-                    client.setServerAddress(serverIPInput.getText());
-                    client.setClientPort(clientPortInput.getText());
-                    client.setClientAddress(clientIPInput.getText());
-                    client.connectToServer();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                boolean fieldsCompleted = validate();
+                if(fieldsCompleted) {
+                    try {
+                        client.setServerPort(serverPortInput.getText());
+                        client.setServerAddress(serverIPInput.getText());
+                        client.setClientPort(clientPortInput.getText());
+                        client.setClientAddress(clientIPInput.getText());
+                        client.connectToServer();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                } else {
+                    fieldEmptyWarning();
                 }
+
 
             }
         });
@@ -51,10 +55,41 @@ public class LoginWindow {
         frame.dispose();
     }
 
+
     public JPanel getPanel() {
         return loginPanel;
     }
+
+    /* Error checking and warning dialogs*/
+
+    public boolean validate(){
+        int errorCount = 0;
+        if (idInput.getText().length() == 0 || clientPortInput.getText().length() == 0
+        || clientIPInput.getText().length() == 0 || serverIPInput.getText().length() == 0 ||
+                serverPortInput.getText().length() == 0) {
+            errorCount++;
+        }
+
+        return errorCount == 0;
+    }
+
+    public void clientAddressWarning(){
+        JOptionPane.showMessageDialog(frame,
+                "Client Address not found on this machine. \nTry\n" + this.client.getListOfLocalAddresses(),
+                "Please check your IP address",
+                JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void fieldEmptyWarning(){
+        JOptionPane.showMessageDialog(frame,
+                "All fields must be completed",
+                "Field Empty",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
 }
+
+
 // public static void main(String[] args) {
 // JFrame frame = new JFrame("App");
 // frame.setContentPane(new LoginGUI().getPanel());
