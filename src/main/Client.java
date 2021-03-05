@@ -35,6 +35,9 @@ public class Client extends Thread {
 
     public void run(){
         openLoginWindow();
+        if(isConnected){
+            openChatWindow();
+        }
 
     }
 
@@ -51,6 +54,7 @@ public class Client extends Thread {
     public void openChatWindow(){
         /* This will open the Chat Window GUI*/
         chatWindow = new ChatWindow(this);
+        chatWindow.openWindow();
 
     }
 
@@ -87,7 +91,8 @@ public class Client extends Thread {
         return isConnected;
     }
 
-    public void connectionStatusChange(){
+    public void connectionStatusChange(ConnectionState status){
+
 
     }
 

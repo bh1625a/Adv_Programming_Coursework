@@ -12,6 +12,7 @@ public class ChatWindow implements UIWindow {
     private JButton sendMessageButton;
     private JPanel displayPanel;
     private JPanel userListPanel;
+    private JList userListField;
     private JFrame frame;
 
 
@@ -59,6 +60,14 @@ public class ChatWindow implements UIWindow {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
         });
+    }
+
+    public void updateDisplay(){
+
+    }
+
+    public void displayMembers(){
+
     }
 
 
