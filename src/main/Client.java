@@ -90,6 +90,7 @@ public class Client extends Thread {
         /* Creates a list of local addresses found on the
         machine by adding to the listOfLocalAddresses arraylist.
          */
+        this.listOfLocalAddresses.clear();
         this.listOfLocalAddresses.add("localhost");
         Enumeration e = NetworkInterface.getNetworkInterfaces();
         while(e.hasMoreElements())
