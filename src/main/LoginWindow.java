@@ -18,6 +18,7 @@ public class LoginWindow {
 
     public LoginWindow(Client client) {
         this.client = client;
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
         connectButton.addActionListener(new ActionListener() {
@@ -37,7 +38,7 @@ public class LoginWindow {
                 } else {
                     fieldEmptyWarning();
                 }
-frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
 
             }
         });
