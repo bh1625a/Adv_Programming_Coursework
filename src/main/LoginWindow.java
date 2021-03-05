@@ -37,7 +37,7 @@ public class LoginWindow {
                 } else {
                     fieldEmptyWarning();
                 }
-
+frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
             }
         });
@@ -53,6 +53,7 @@ public class LoginWindow {
     public void closeWindow(){
         frame.setVisible(false);
         frame.dispose();
+
     }
 
 
