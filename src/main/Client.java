@@ -65,7 +65,9 @@ public class Client extends Thread {
             } else {
                 loginWindow.clientAddressWarning();
             }
-        } catch (UnknownHostException h){
+        } catch (ConnectException cx){
+            loginWindow.serverNotFoundWarning();
+        } catch (SocketException se){
             loginWindow.serverNotFoundWarning();
         }
     }
