@@ -87,6 +87,12 @@ public class LoginWindow {
                 JOptionPane.ERROR_MESSAGE);
     }
 
+    public void serverNotFoundWarning(){
+        JOptionPane.showMessageDialog(frame,
+                "Server IP not found",
+                "Sever IP not found",
+                JOptionPane.ERROR_MESSAGE);
+    }
 }
 
 // Former Test Code for LoginWindow

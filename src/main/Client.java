@@ -55,14 +55,18 @@ public class Client extends Thread {
 
     public void connectToServer() throws IOException {
         createListOfLocalAddresses();
-        if(checkClientIpAvailable(this.getClientAddress())){
-            socket = new Socket(this.getServerAddress(), this.getServerPort(), InetAddress.getByName(this.getClientAddress()), this.getClientPort());
-            out = new PrintWriter(socket.getOutputStream());
-            in = new Scanner(socket.getInputStream());
-            setIsConnected(true);
-            closeLoginWindow();
-        } else{
-            loginWindow.clientAddressWarning();
+        try {
+            if (checkClientIpAvailable(this.getClientAddress())) {
+                socket = new Socket(this.getServerAddress(), this.getServerPort(), InetAddress.getByName(this.getClientAddress()), this.getClientPort());
+                out = new PrintWriter(socket.getOutputStream());
+                in = new Scanner(socket.getInputStream());
+                setIsConnected(true);
+                closeLoginWindow();
+            } else {
+                loginWindow.clientAddressWarning();
+            }
+        } catch (UnknownHostException h){
+            loginWindow.serverNotFoundWarning();
         }
     }
 
