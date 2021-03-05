@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class ConnectionHandler extends Thread {
@@ -14,11 +16,24 @@ public class ConnectionHandler extends Thread {
     private Socket connection;
     private Scanner in;
     private PrintWriter out;
+    private HashMap<String, ClientHandler> clientList;
+
 
     public ConnectionHandler(String serverIP, int serverPort){
         this.serverIP = serverIP;
         this.serverPort = serverPort;
+        this.clientList = new HashMap<String,ClientHandler>();
         super.start();
+    }
+    
+    public void addToClientList(String ID, ClientHandler clientConnection){
+        this.clientList.put(ID,clientConnection);
+        notifyClients();
+    }
+    public void notifyClients(){
+        for (String clients: this.clientList.keySet()){
+            System.out.println(clients);
+        }
     }
 
     @Override

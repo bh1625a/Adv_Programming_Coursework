@@ -57,7 +57,6 @@ public class LoginWindow {
 
     }
 
-
     public JPanel getPanel() {
         return loginPanel;
     }
