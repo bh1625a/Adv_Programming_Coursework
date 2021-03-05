@@ -9,8 +9,6 @@ public class ClientHelper extends Thread {
 
     public void run(){
         client = new Client(this);
-
-
     }
 
 }

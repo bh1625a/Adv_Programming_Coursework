@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-public class LoginWindow {
+public class LoginWindow implements UIWindow {
     private JPanel loginPanel;
     private JTextField idInput;
     private JTextField clientPortInput;
@@ -43,19 +43,17 @@ public class LoginWindow {
             }
         });
     }
-
     public void openWindow(){
         frame.setContentPane(getPanel());
         frame.pack();
         frame.setVisible(true);
-
     }
 
     public void closeWindow(){
         frame.setVisible(false);
         frame.dispose();
-
     }
+
 
     public JPanel getPanel() {
         return loginPanel;

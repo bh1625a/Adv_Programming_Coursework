@@ -50,6 +50,7 @@ public class Client extends Thread {
 
     public void openChatWindow(){
         /* This will open the Chat Window GUI*/
+        chatWindow = new ChatWindow(this);
 
     }
 
