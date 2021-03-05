@@ -87,10 +87,17 @@ public class LoginWindow {
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    public void serverNotFoundWarning(){
+    public void serverIPNotFoundWarning(){
         JOptionPane.showMessageDialog(frame,
-                "Incorrect Server IP or Port",
-                "Check server IP and port are correct",
+                "Incorrect Server IP",
+                "Check server IP is correct",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void incorrectServerPortWarning(){
+        JOptionPane.showMessageDialog(frame,
+                "Incorrect server port",
+                "Check server port",
                 JOptionPane.ERROR_MESSAGE);
     }
 }
