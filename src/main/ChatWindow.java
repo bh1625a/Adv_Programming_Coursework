@@ -13,6 +13,7 @@ public class ChatWindow implements UIWindow {
     private JPanel displayPanel;
     private JPanel userListPanel;
     private JList userListField;
+    private JTextArea textArea;
     private JFrame frame = new JFrame("Chat");
 
 
@@ -26,6 +27,10 @@ public class ChatWindow implements UIWindow {
         sendMessageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String input = userInputField.getText();
+                userInputField.setText("");
+                textArea.append(input);
+                textArea.append("\n");
 
             }
         });
