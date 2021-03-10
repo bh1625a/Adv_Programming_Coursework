@@ -31,6 +31,7 @@ public class LoginWindow implements UIWindow {
                         client.setServerAddress(serverIPInput.getText());
                         client.setClientPort(clientPortInput.getText());
                         client.setClientAddress(clientIPInput.getText());
+                        // Attempt to connect to the server using the supplied information
                         client.connectToServer();
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
@@ -44,15 +45,17 @@ public class LoginWindow implements UIWindow {
         });
     }
     public void openWindow(){
-        frame.setContentPane(getPanel());
-        frame.pack();
-        frame.setVisible(true);
+            frame.setContentPane(getPanel());
+            frame.pack();
+            frame.setLocationRelativeTo(null); // centres the window
+            frame.setVisible(true);
     }
 
     public void closeWindow(){
         frame.setVisible(false);
         frame.dispose();
     }
+
 
 
     public JPanel getPanel() {

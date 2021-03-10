@@ -13,13 +13,14 @@ public class ChatWindow implements UIWindow {
     private JPanel displayPanel;
     private JPanel userListPanel;
     private JList userListField;
-    private JFrame frame;
+    private JFrame frame = new JFrame("Chat");
 
 
     private Client client;
 
     public ChatWindow(Client client){
         this.client = client;
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userQuits();
 
         sendMessageButton.addActionListener(new ActionListener() {
@@ -34,6 +35,7 @@ public class ChatWindow implements UIWindow {
     public void openWindow(){
         frame.setContentPane(getPanel());
         frame.pack();
+        frame.setSize(500,500);
         frame.setVisible(true);
     }
 
@@ -49,15 +51,14 @@ public class ChatWindow implements UIWindow {
     }
 
     public void userQuits(){
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosed(WindowEvent e) {
-                super.windowClosed(e);
+            public void windowClosing(WindowEvent e) {
                 // Call code to remove from list of active users
                 // ADD CODE HERE
+                System.out.println("Closing window");
+                e.getWindow().dispose();
 
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
         });
     }

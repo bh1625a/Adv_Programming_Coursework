@@ -35,9 +35,7 @@ public class Client extends Thread {
 
     public void run(){
         openLoginWindow();
-        if(isConnected){
-            openChatWindow();
-        }
+        openChatWindow();
 
     }
 
@@ -65,7 +63,7 @@ public class Client extends Thread {
                 socket = new Socket(this.getServerAddress(), this.getServerPort(), InetAddress.getByName(this.getClientAddress()), this.getClientPort());
                 out = new PrintWriter(socket.getOutputStream());
                 in = new Scanner(socket.getInputStream());
-                setIsConnected(true);
+                this.isConnected = true;
                 closeLoginWindow();
             } else {
                 loginWindow.clientAddressWarning();
@@ -84,7 +82,7 @@ public class Client extends Thread {
     }
 
     public void setIsConnected(boolean value){
-        isConnected = value;
+        this.isConnected = value;
     }
 
     public boolean isConnected(){
