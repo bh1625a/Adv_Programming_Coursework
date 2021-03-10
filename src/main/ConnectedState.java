@@ -1,19 +1,26 @@
 package main;
 
-public class ConnectedState implements ConnectionState {
+public class ConnectedState extends ConnectionState {
 
-
-    @Override
-    public void setState(Client client) {
-        client.connectionStatusChange(this);
+    public ConnectedState(ClientHandler ch) {
+        super(ch);
     }
 
-    @Override
-    public void getConnectionState() {
+    public String onJoin(){
+        return "Connected";
+    }
 
+
+    public String onQuit(){
+        ch.changeState(new DisconnectedState(ch));
+        return "Disconnected";
     }
 
     public void sendMessage(){
 
+    }
+
+    public String toString(){
+        return "Connected";
     }
 }
