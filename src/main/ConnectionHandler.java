@@ -47,6 +47,7 @@ public class ConnectionHandler extends Thread {
 
                 System.out.println("New Client IP: " + clientIP + ", Client Port: " + clientPort);
 
+                // Deals with a new connection by creating a new thread
                 ClientHandler initiateConnection = new ClientHandler(this, connection);
 
             } catch (IOException e) {
@@ -61,6 +62,10 @@ public class ConnectionHandler extends Thread {
 
 
         }
+    }
+
+    public HashMap<String, ClientHandler> listOfUsers(){
+        return clientList;
     }
 
 

@@ -27,6 +27,7 @@ public class LoginWindow implements UIWindow {
                 boolean fieldsCompleted = validate();
                 if(fieldsCompleted) {
                     try {
+                        client.setId(idInput.getText());
                         client.setServerPort(serverPortInput.getText());
                         client.setServerAddress(serverIPInput.getText());
                         client.setClientPort(clientPortInput.getText());

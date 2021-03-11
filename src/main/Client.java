@@ -20,6 +20,7 @@ public class Client extends Thread {
     private String serverAddress;
     private int clientPort;
     private String clientAddress;
+    private String id;
 
 
     private Scanner in;
@@ -61,8 +62,9 @@ public class Client extends Thread {
         try {
             if (checkClientIpAvailable(this.getClientAddress())) {
                 socket = new Socket(this.getServerAddress(), this.getServerPort(), InetAddress.getByName(this.getClientAddress()), this.getClientPort());
-                out = new PrintWriter(socket.getOutputStream());
                 in = new Scanner(socket.getInputStream());
+                out = new PrintWriter(socket.getOutputStream(),true);
+                out.println(this.id);
                 this.isConnected = true;
                 closeLoginWindow();
             } else {
@@ -120,6 +122,9 @@ public class Client extends Thread {
         }
     }
 
+    public synchronized void setId(String id){
+        this.id = id;
+    }
 
     public boolean checkClientIpAvailable(String ip){
         return this.listOfLocalAddresses.contains(ip);

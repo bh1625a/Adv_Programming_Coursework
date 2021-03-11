@@ -12,7 +12,7 @@ public class ClientHandler extends Thread{
     private ConnectionHandler connectionToHandler;
     private Socket connectionSocket;
     private boolean isClientConnected = true;
-    private String id;
+    private String id = "";
     private Scanner in;
     private PrintWriter out;
     private ConnectionState state;
@@ -22,8 +22,7 @@ public class ClientHandler extends Thread{
         this.connectionSocket = connectionSocket;
         this.state = new ConnectedState(this);
         super.start();
-        in = new Scanner(connectionSocket.getInputStream());
-        out = new PrintWriter(connectionSocket.getOutputStream());
+
     }
 
     public void sendMessage(String message){
@@ -53,10 +52,28 @@ public class ClientHandler extends Thread{
 
     @Override
     public void run()  {
-        if(state.toString().equals("Connected")){
-            System.out.println("Client is connected");
-        } else {
-            System.out.println("Client is not connected.");
+        try {
+            in = new Scanner(connectionSocket.getInputStream());
+            out = new PrintWriter(connectionSocket.getOutputStream());
+
+            if (state.toString().equals("Connected")) {
+                this.id = in.nextLine();
+                if (id == null) {
+                    System.out.println("Id was empty. Something has gone wrong.");
+                } else{
+                    System.out.println("Checking ID" + this.id);
+                    if(this.connectionToHandler.listOfUsers().containsKey(id)){
+                        // ID already exists
+                    } else {
+                        // ID is free for use. Add ID to current users
+                        this.connectionToHandler.addToClientList(this.id, this);
+                    }
+                }
+            } else {
+                System.out.println("Client is not connected.");
+            }
+        } catch (Exception e){
+            e.getMessage();
         }
 
     }
