@@ -1,10 +1,7 @@
 package main;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 public class ChatWindow implements UIWindow {
     private JPanel mainPanel;
@@ -25,6 +22,17 @@ public class ChatWindow implements UIWindow {
         userQuits();
 
         sendMessageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String input = userInputField.getText();
+                userInputField.setText("");
+                textArea.append(input);
+                textArea.append("\n");
+
+            }
+        });
+
+        userInputField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String input = userInputField.getText();
