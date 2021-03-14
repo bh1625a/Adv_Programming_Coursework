@@ -2,6 +2,7 @@ package main;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public class ChatWindow implements UIWindow {
     private JPanel mainPanel;
@@ -13,8 +14,8 @@ public class ChatWindow implements UIWindow {
     private JTextArea textArea;
     private JFrame frame = new JFrame("Chat");
 
-
     private Client client;
+    private ClientHelper clientHelper;
 
     public ChatWindow(Client client){
         this.client = client;
@@ -80,8 +81,8 @@ public class ChatWindow implements UIWindow {
 
     }
 
-    public void displayMembers(){
-
+    public void displayMembers() throws IOException {
+        clientHelper.getAllMembers();
     }
 
 

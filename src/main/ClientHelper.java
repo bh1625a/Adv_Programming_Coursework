@@ -13,7 +13,7 @@ public class ClientHelper extends Thread {
     private String message = "";
     private String userList;
     private String clientPort;
-    private ArrayList<String> userArrayList;
+    private ArrayList<String> memberList;
     private InputStreamReader isr;
 
 
@@ -31,40 +31,42 @@ public class ClientHelper extends Thread {
     public void sendMemberDetails() throws IOException {
         try {
             socket = new Socket();
-            clientPort = String.valueOf(client.getClientPort());
 
             while (client.isConnected()) {
                 out = new PrintWriter(socket.getOutputStream(), true);
                 out.println("SUBMITUSERLIST");
-                userList = client.getClientAddress() + "," + clientPort;
+                userList = client.getClientAddress() + "," + client.getClientPort();
                 out.println(userList);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void displayMembers() throws IOException {
+    public ArrayList<String> getAllMembers() throws IOException {
         socket = new Socket();
         isr = new InputStreamReader(System.in);
         in = new BufferedReader(isr);
-
-        while (true){
-            while (message == in.readLine()){
-                if (message != null){
-                    if (message.equals("ALLUSERS")){
-                        String list = "";
-                        while (list == in.readLine()){
-                            userArrayList.add(list);
-
-                        }
-                        if(message.contains("END")){
-                            break;
+        memberList = new ArrayList<>();
+        try {
+            while (client.isConnected())
+                while (true) {
+                    while (message == in.readLine()) {
+                        if (message != null) {
+                            if (message.equals("ALLUSERS")) {
+                                String list = "";
+                                while (list == in.readLine()) {
+                                    memberList.add(list);
+                                }
+                                if (message.contains("END")) {
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
-
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
+        return memberList;
     }
 }
