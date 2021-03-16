@@ -82,7 +82,15 @@ public class ChatWindow implements UIWindow {
     }
 
     public void displayMembers() throws IOException {
-        clientHelper.getAllMembers();
+        try {
+            while (client.isConnected()) {
+                userListField = new JList((ListModel) clientHelper.getAllMembers());
+            }
+        } finally {
+
+        }
+
+
     }
 
 
