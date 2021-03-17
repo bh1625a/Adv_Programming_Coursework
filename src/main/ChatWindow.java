@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.IOException;
 
-public class ChatWindow implements UIWindow {
+public class ChatWindow extends Thread implements UIWindow{
     private JPanel mainPanel;
     private JTextField userInputField;
     private JButton sendMessageButton;
@@ -89,14 +89,16 @@ public class ChatWindow implements UIWindow {
     }
 
     public void updateDisplay(String message){
-        String msg = "";
-        msg += message + "\n";
-        textArea.setText(msg);
+            String msg = "";
+            msg += message + "\n";
+            textArea.setText(msg);
     }
 
     public void displayMembers() throws IOException {
+    }
 
-
+    public void run(){
+        //updateDisplay("Whatever");
     }
 
 

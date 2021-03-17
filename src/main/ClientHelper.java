@@ -69,7 +69,8 @@ public class ClientHelper extends Thread {
                             else if (userInputStream.equals("/SENDMESSAGE")){
                                 // Update ChatWindow textArea with message
                                 String message = in.readLine();
-                                client.UpdateChatWindow(client.getUserId(), message);
+                                    client.UpdateChatWindow(client.getUserId(), message);
+                                    break;
                             }
                         }
         } catch (Exception e) {
