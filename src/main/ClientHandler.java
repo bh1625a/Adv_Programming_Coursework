@@ -26,7 +26,7 @@ public class ClientHandler extends Thread{
     }
 
     public void sendMessage(String message){
-        out.println("MESSAGE");
+        out.println("/SENDMESSAGE");
         out.println(message);
     }
 
@@ -40,6 +40,7 @@ public class ClientHandler extends Thread{
 
     public void sendCurrentUserList(){
         out.println("SUBMITUSERLIST");
+
     }
 
     public void changeState(ConnectionState state){
@@ -101,4 +102,5 @@ public class ClientHandler extends Thread{
         }
 
     }
+
 }

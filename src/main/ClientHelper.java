@@ -42,6 +42,8 @@ public class ClientHelper extends Thread {
             e.printStackTrace();
         }
     }
+
+
     public ArrayList<String> getAllMembers() throws IOException {
         socket = new Socket();
         isr = new InputStreamReader(System.in);
@@ -49,21 +51,19 @@ public class ClientHelper extends Thread {
         memberList = new ArrayList<>();
         try {
             while (client.isConnected())
-                while (true) {
-                    while (message == in.readLine()) {
-                        if (message != null) {
-                            if (message.equals("ALLUSERS")) {
-                                String list = "";
-                                while (list == in.readLine()) {
-                                    memberList.add(list);
+                    message = in.readLine();
+                        while (message != null) {
+                            if (message.equals("/ALLUSERS")) {
+                                String incomingListID = "";
+                                incomingListID = in.readLine();
+                                while (incomingListID != null) {
+                                    memberList.add(incomingListID);
                                 }
-                                if (message.contains("END")) {
+                                if (message.contains("/END")) {
                                     break;
                                 }
                             }
                         }
-                    }
-                }
         } catch (Exception e) {
             e.printStackTrace();
         }

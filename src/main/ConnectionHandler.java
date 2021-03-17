@@ -5,9 +5,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class ConnectionHandler extends Thread {
     private int serverPort;
@@ -73,6 +71,15 @@ public class ConnectionHandler extends Thread {
             listOfUsers().get(recipient).sendMessage(message);
         }
     }
-    public void notifyUsers(){}
+    public void notifyUsers(HashMap<String, ClientHandler> userList){
+        out.println("/ALLUSERS");
+        for(Map.Entry<String, ClientHandler> entry : userList.entrySet()){
+            String id = entry.getKey();
+            out.println(id);
+        }
+        out.println("/END");
+
+
+    }
 
 }
