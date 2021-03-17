@@ -25,10 +25,16 @@ public class ChatWindow implements UIWindow {
         sendMessageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String input = userInputField.getText();
-                userInputField.setText("");
-                textArea.append(input);
-                textArea.append("\n");
+                try {
+                    String recipient = (String) userListField.getSelectedValue();
+                    String input = userInputField.getText();
+                    client.sendMessage(input, recipient);
+                } catch (NullPointerException ne) {
+                    ne.getMessage();
+                }
+//                userInputField.setText("");
+//                textArea.append(input);
+//                textArea.append("\n");
 
             }
         });
@@ -92,6 +98,5 @@ public class ChatWindow implements UIWindow {
 
 
     }
-
 
 }

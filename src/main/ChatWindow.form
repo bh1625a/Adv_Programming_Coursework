@@ -86,7 +86,14 @@
                 <preferred-size width="150" height="50"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <model>
+                <item value="Ben"/>
+                <item value="Mani"/>
+                <item value="Max"/>
+              </model>
+              <selectionMode value="0"/>
+            </properties>
           </component>
         </children>
       </grid>

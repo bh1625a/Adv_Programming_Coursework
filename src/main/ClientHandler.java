@@ -1,10 +1,7 @@
 package main;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -16,6 +13,9 @@ public class ClientHandler extends Thread{
     private Scanner in;
     private PrintWriter out;
     private ConnectionState state;
+
+    private String message;
+    private String recipient;
 
     public ClientHandler(ConnectionHandler connectionToHandler, Socket connectionSocket) throws IOException {
         this.connectionToHandler = connectionToHandler;
@@ -80,6 +80,18 @@ public class ClientHandler extends Thread{
                     System.out.println("Client is not connected.");
                 }
             } // Checking username loop ends here
+
+            String userInputStream = in.nextLine();
+            while(userInputStream != null){
+                if(userInputStream.equals("/SENDMESSAGE")){
+                    this.recipient = in.nextLine();
+                    this.message = in.nextLine();
+                    connectionToHandler.sendMessageToUser(message, recipient);
+                    break;
+                }
+
+            }
+
         }
 
 

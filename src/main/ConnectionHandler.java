@@ -68,7 +68,11 @@ public class ConnectionHandler extends Thread {
         return clientList;
     }
 
-    public void parseMessage(){}
+    public void sendMessageToUser(String message, String recipient){
+        if (listOfUsers().containsKey(recipient)){
+            listOfUsers().get(recipient).sendMessage(message);
+        }
+    }
     public void notifyUsers(){}
 
 }

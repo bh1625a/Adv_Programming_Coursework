@@ -76,6 +76,7 @@ public class Client extends Thread {
             } else {
                 loginWindow.clientAddressWarning();
             }
+
         } catch (ConnectException cx){
             loginWindow.incorrectServerPortWarning();
         } catch (SocketException se){
@@ -84,6 +85,13 @@ public class Client extends Thread {
             loginWindow.serverIPNotFoundWarning();
         }
     }
+
+    public void sendMessage(String message, String recipient){
+        this.out.println("/SENDMESSAGE");
+        this.out.println(recipient);
+        this.out.println(message);
+    }
+
 
     public ArrayList<String> getListOfLocalAddresses(){
         return this.listOfLocalAddresses;
