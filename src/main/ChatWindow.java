@@ -88,8 +88,10 @@ public class ChatWindow implements UIWindow {
         });
     }
 
-    public void updateDisplay(){
-
+    public void updateDisplay(String message){
+        String msg = "";
+        msg += message + "\n";
+        textArea.setText(msg);
     }
 
     public void displayMembers() throws IOException {

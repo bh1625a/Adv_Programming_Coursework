@@ -10,7 +10,7 @@ public class ClientHelper extends Thread {
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
-    private String message = "";
+    private String userInputStream = "";
     private String userList;
     private String clientPort;
     private ArrayList<String> memberList;
@@ -51,17 +51,20 @@ public class ClientHelper extends Thread {
         memberList = new ArrayList<>();
         try {
             while (client.isConnected())
-                    message = in.readLine();
-                        while (message != null) {
-                            if (message.equals("/ALLUSERS")) {
+                    userInputStream = in.readLine();
+                        while (userInputStream != null) {
+                            if (userInputStream.equals("/ALLUSERS")) {
                                 String incomingListID = "";
                                 incomingListID = in.readLine();
                                 while (incomingListID != null) {
                                     memberList.add(incomingListID);
                                 }
-                                if (message.contains("/END")) {
+                                if (userInputStream.contains("/END")) {
                                     break;
                                 }
+                            }
+                            else if (userInputStream.equals("/SENDMESSAGE")){
+                                // Update ChatWindow textArea with message
                             }
                         }
         } catch (Exception e) {

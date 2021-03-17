@@ -137,6 +137,10 @@ public class Client extends Thread {
         }
     }
 
+    public void UpdateChatWindow(String id, String message){
+        // Tells GUI to display message from id
+    }
+
     public synchronized void setId(String id){
         this.id = id;
     }
@@ -176,4 +180,6 @@ public class Client extends Thread {
     public int getClientPort() {
         return clientPort;
     }
+
+
 }
