@@ -17,14 +17,17 @@ public class ClientHelper extends Thread {
     private InputStreamReader isr;
 
 
-
-
     public ClientHelper(){
         super.start();
     }
 
     public void run(){
         client = new Client(this);
+        try {
+            getAllMembers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -65,6 +68,8 @@ public class ClientHelper extends Thread {
                             }
                             else if (userInputStream.equals("/SENDMESSAGE")){
                                 // Update ChatWindow textArea with message
+                                String message = in.readLine();
+                                client.UpdateChatWindow(client.getUserId(), message);
                             }
                         }
         } catch (Exception e) {

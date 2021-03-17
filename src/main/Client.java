@@ -138,10 +138,16 @@ public class Client extends Thread {
 
     public void UpdateChatWindow(String id, String message){
         // Tells GUI to display message from id
+        String updatedMessage = id + ": " + message;
+        chatWindow.updateDisplay(updatedMessage);
     }
 
     public synchronized void setId(String id){
         this.id = id;
+    }
+
+    public String getUserId(){
+        return this.id;
     }
 
     public boolean checkClientIpAvailable(String ip){
