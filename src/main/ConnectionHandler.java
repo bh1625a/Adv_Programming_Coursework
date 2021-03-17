@@ -28,11 +28,7 @@ public class ConnectionHandler extends Thread {
         this.clientList.put(ID,clientConnection);
         notifyClients();
     }
-    public void notifyClients(){
-        for (String clients: this.clientList.keySet()){
-            System.out.println("Current list of connected users: " + clients);
-        }
-    }
+
 
     @Override
     public void run(){
@@ -70,6 +66,17 @@ public class ConnectionHandler extends Thread {
         if (listOfUsers().containsKey(recipient)){
             listOfUsers().get(recipient).sendMessage(message);
         }
+    }
+
+    public void notifyClients(){
+        ArrayList<String> listOfCurrentUsers = new ArrayList<>(clientList.keySet());
+        Collections.sort(listOfCurrentUsers);
+        for(String id : clientList.keySet()){
+            ClientHandler ch = clientList.get(id);
+            ch.notifyUsers(listOfCurrentUsers);
+        }
+
+
     }
 
 //    public void notifyUsers(HashMap<String, ClientHandler> userList){

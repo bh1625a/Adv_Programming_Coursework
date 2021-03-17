@@ -3,6 +3,7 @@ package main;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -98,17 +99,15 @@ public class ClientHandler extends Thread{
         }
 
 
-
         catch (Exception e){
             e.getMessage();
         }
 
     }
 
-    public void notifyUsers(){
+    public void notifyUsers(ArrayList<String> userList){
         out.println("/ALLUSERS");
-        for(Map.Entry<String, ClientHandler> entry : connectionToHandler.listOfUsers().entrySet()){
-            String id = entry.getKey();
+        for (String id : userList){
             out.println(id);
         }
         out.println("/END");
