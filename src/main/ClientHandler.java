@@ -16,7 +16,7 @@ public class ClientHandler extends Thread{
     private Scanner in;
     private PrintWriter out;
     private ConnectionState state;
-
+    private Client client;
     private String message;
     private String recipient;
 
@@ -112,5 +112,14 @@ public class ClientHandler extends Thread{
         }
         out.println("/END");
     }
+    public void setTheCoordinator(){
+        while (this.connectionToHandler.listOfUsers().size() == 0){
+            this.client.setCoordinator(true);
+        }
+
+    }
+            //client stores state of whether coordinator
+    //client handler connected to connected handler
+    //this.connectionHandler
 
 }
