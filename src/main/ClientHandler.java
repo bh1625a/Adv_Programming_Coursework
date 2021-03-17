@@ -55,7 +55,7 @@ public class ClientHandler extends Thread{
 
         try {
             in = new Scanner(connectionSocket.getInputStream());
-            out = new PrintWriter(connectionSocket.getOutputStream());
+            out = new PrintWriter(connectionSocket.getOutputStream(), true);
             while(true) {
                 if (state.toString().equals("Connected")) {
                     this.id = in.nextLine();
@@ -65,9 +65,13 @@ public class ClientHandler extends Thread{
                         System.out.println("Checking ID " + this.id);
                         if (this.connectionToHandler.listOfUsers().containsKey(id)) {
                             // ID already exists
-
+                            out.println("INVALIDID");
+                            connectionSocket.close();
+                            System.out.println("ID " + this.id + " is already taken.");
                         } else {
                             // ID is free for use. Add ID to current users
+                            out.println("IDACCEPTED");
+                            System.out.println("ID accepted");
                             this.connectionToHandler.addToClientList(this.id, this);
                             break;
                         }
@@ -75,7 +79,7 @@ public class ClientHandler extends Thread{
                 } else {
                     System.out.println("Client is not connected.");
                 }
-            }
+            } // Checking username loop ends here
         }
 
 

@@ -103,6 +103,20 @@ public class LoginWindow implements UIWindow {
                 "Check server port",
                 JOptionPane.ERROR_MESSAGE);
     }
+
+    public void userNameTakenWarning(){
+        JOptionPane.showMessageDialog(frame,
+                "Username already in use",
+                "Username taken",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void debuggingWarning(){
+        JOptionPane.showMessageDialog(frame,
+                "This method causes error",
+                "This exception causes error",
+                JOptionPane.ERROR_MESSAGE);
+    }
 }
 
 // Former Test Code for LoginWindow

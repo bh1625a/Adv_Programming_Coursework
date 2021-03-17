@@ -65,15 +65,21 @@ public class Client extends Thread {
                 in = new Scanner(socket.getInputStream());
                 out = new PrintWriter(socket.getOutputStream(),true);
                 out.println(this.id);
-                this.isConnected = true;
-                closeLoginWindow();
+                if (in.nextLine().equals("IDACCEPTED")) {
+                    this.isConnected = true;
+                    closeLoginWindow();
+                } else {
+                    loginWindow.userNameTakenWarning();
+                    socket.close();
+                    return;
+                }
             } else {
                 loginWindow.clientAddressWarning();
             }
         } catch (ConnectException cx){
             loginWindow.incorrectServerPortWarning();
         } catch (SocketException se){
-            loginWindow.incorrectServerPortWarning();
+            loginWindow.debuggingWarning();
         } catch (UnknownHostException uhe){
             loginWindow.serverIPNotFoundWarning();
         }

@@ -32,7 +32,7 @@ public class ConnectionHandler extends Thread {
     }
     public void notifyClients(){
         for (String clients: this.clientList.keySet()){
-            System.out.println(clients);
+            System.out.println("Current list of connected users: " + clients);
         }
     }
 
