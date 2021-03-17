@@ -19,6 +19,8 @@ public class ChatWindow implements UIWindow {
 
     public ChatWindow(Client client){
         this.client = client;
+        userInputField.setEditable(false);
+        sendMessageButton.setEnabled(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userQuits();
 
@@ -32,9 +34,6 @@ public class ChatWindow implements UIWindow {
                 } catch (NullPointerException ne) {
                     ne.getMessage();
                 }
-//                userInputField.setText("");
-//                textArea.append(input);
-//                textArea.append("\n");
 
             }
         });
@@ -68,6 +67,13 @@ public class ChatWindow implements UIWindow {
     @Override
     public JPanel getPanel() {
         return mainPanel;
+    }
+
+    public void makeMessageAvailable(){
+        // This makes it possible to send messages after a user has logged in.
+        // Input fields are disabled prior to this
+        this.userInputField.setEditable(true);
+        this.sendMessageButton.setEnabled(true);
     }
 
     public void userQuits(){

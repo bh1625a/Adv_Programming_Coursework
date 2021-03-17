@@ -67,6 +67,7 @@ public class Client extends Thread {
                 out.println(this.id);
                 if (in.nextLine().equals("IDACCEPTED")) {
                     this.isConnected = true;
+                    this.chatWindow.makeMessageAvailable();
                     closeLoginWindow();
                 } else {
                     loginWindow.userNameTakenWarning();
