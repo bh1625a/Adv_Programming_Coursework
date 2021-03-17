@@ -3,6 +3,8 @@ package main;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ClientHandler extends Thread{
@@ -101,6 +103,15 @@ public class ClientHandler extends Thread{
             e.getMessage();
         }
 
+    }
+
+    public void notifyUsers(){
+        out.println("/ALLUSERS");
+        for(Map.Entry<String, ClientHandler> entry : connectionToHandler.listOfUsers().entrySet()){
+            String id = entry.getKey();
+            out.println(id);
+        }
+        out.println("/END");
     }
 
 }

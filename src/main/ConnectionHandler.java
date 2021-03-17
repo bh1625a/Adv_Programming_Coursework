@@ -71,15 +71,14 @@ public class ConnectionHandler extends Thread {
             listOfUsers().get(recipient).sendMessage(message);
         }
     }
-    public void notifyUsers(HashMap<String, ClientHandler> userList){
-        out.println("/ALLUSERS");
-        for(Map.Entry<String, ClientHandler> entry : userList.entrySet()){
-            String id = entry.getKey();
-            out.println(id);
-        }
-        out.println("/END");
 
-
-    }
+//    public void notifyUsers(HashMap<String, ClientHandler> userList){
+//        out.println("/ALLUSERS");
+//        for(Map.Entry<String, ClientHandler> entry : userList.entrySet()){
+//            String id = entry.getKey();
+//            out.println(id);
+//        }
+//        out.println("/END");
+//    }
 
 }
