@@ -93,7 +93,6 @@ public class Client extends Thread {
         this.out.println(message);
     }
 
-
     public ArrayList<String> getListOfLocalAddresses(){
         return this.listOfLocalAddresses;
     }
@@ -181,5 +180,8 @@ public class Client extends Thread {
         return clientPort;
     }
 
+    public void setCoordinator(boolean value){
+        this.isCoordinator = value;
+    }
 
 }
