@@ -68,9 +68,7 @@ public class ConnectionHandler extends Thread {
         return clientList;
     }
 
-
     public void parseMessage(){}
     public void notifyUsers(){}
-
 
 }

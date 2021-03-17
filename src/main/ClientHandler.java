@@ -52,27 +52,35 @@ public class ClientHandler extends Thread{
 
     @Override
     public void run()  {
+
         try {
             in = new Scanner(connectionSocket.getInputStream());
             out = new PrintWriter(connectionSocket.getOutputStream());
-
-            if (state.toString().equals("Connected")) {
-                this.id = in.nextLine();
-                if (id == null) {
-                    System.out.println("Id was empty. Something has gone wrong.");
-                } else{
-                    System.out.println("Checking ID" + this.id);
-                    if(this.connectionToHandler.listOfUsers().containsKey(id)){
-                        // ID already exists
+            while(true) {
+                if (state.toString().equals("Connected")) {
+                    this.id = in.nextLine();
+                    if (id == null) {
+                        System.out.println("Id was empty. Something has gone wrong.");
                     } else {
-                        // ID is free for use. Add ID to current users
-                        this.connectionToHandler.addToClientList(this.id, this);
+                        System.out.println("Checking ID " + this.id);
+                        if (this.connectionToHandler.listOfUsers().containsKey(id)) {
+                            // ID already exists
+
+                        } else {
+                            // ID is free for use. Add ID to current users
+                            this.connectionToHandler.addToClientList(this.id, this);
+                            break;
+                        }
                     }
+                } else {
+                    System.out.println("Client is not connected.");
                 }
-            } else {
-                System.out.println("Client is not connected.");
             }
-        } catch (Exception e){
+        }
+
+
+
+        catch (Exception e){
             e.getMessage();
         }
 
