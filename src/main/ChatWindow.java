@@ -45,7 +45,6 @@ public class ChatWindow implements UIWindow {
                 userInputField.setText("");
                 textArea.append(input);
                 textArea.append("\n");
-
             }
         });
     }
@@ -94,15 +93,9 @@ public class ChatWindow implements UIWindow {
     }
 
     public void displayMembers() throws IOException {
-        try {
-            while (client.isConnected()) {
-                userListField = new JList((ListModel) clientHelper.getAllMembers());
-            }
-        } finally {
-
-        }
 
 
     }
+
 
 }
