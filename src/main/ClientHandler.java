@@ -1,6 +1,8 @@
 package main;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -19,6 +21,11 @@ public class ClientHandler extends Thread{
     private Client client;
     private String message;
     private String recipient;
+    private InputStreamReader isr;
+    private BufferedReader bufferedReader;
+    private String userList;
+    private ArrayList listOfUsers;
+
 
     public ClientHandler(ConnectionHandler connectionToHandler, Socket connectionSocket) throws IOException {
         this.connectionToHandler = connectionToHandler;
@@ -113,9 +120,38 @@ public class ClientHandler extends Thread{
         out.println("/END");
     }
     public void setTheCoordinator(){
-        while (this.connectionToHandler.listOfUsers().size() == 0){
-            this.client.setCoordinator(true);
+        isr = new InputStreamReader(System.in);
+        bufferedReader = new BufferedReader(isr);
+        listOfUsers = new ArrayList();
+
+        try {
+            while (client.isConnected()){
+                userList = bufferedReader.readLine();
+                while(userList != null){
+                    if (userList == "/USERLIST"){
+                        String users = "";
+                        users = bufferedReader.readLine();
+                        while (users != null){
+                            listOfUsers.add(userList);
+                            while (listOfUsers.size() == 0){
+                                this.client.setCoordinator(true);
+                            }
+                        }
+                    }
+                }
+            }
+
+            out.println("/COORDINATOR");
+            for (int i = 0; i<listOfUsers.size(); i++){
+                out.println(this.client.getClientPort() + ":" + this.client.getClientAddress());
+            }
+            out.println("/FINISH");
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+
 
     }
             //client stores state of whether coordinator
