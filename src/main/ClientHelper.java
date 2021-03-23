@@ -3,18 +3,17 @@ package main;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ClientHelper extends Thread {
     private Client client;
-    private ClientHelper clientHelper;
     private Socket socket;
     private PrintWriter out;
-    private BufferedReader in;
+    private Scanner in;
     private String userInputStream = "";
     private String userList;
-    private String clientPort;
     private ArrayList<String> memberList;
-    private InputStreamReader isr;
+    private boolean isConnected = false;
 
 
     public ClientHelper(){
@@ -22,12 +21,61 @@ public class ClientHelper extends Thread {
     }
 
     public void run(){
-        client = new Client(this);
         try {
-            getAllMembers();
-        } catch (IOException e) {
+            client = new Client(this);
+            System.out.println(getConnected());
+            while(true) {
+                if (getConnected()) {
+                    System.out.println(getConnected());
+                    userInputStream = in.nextLine();
+                    System.out.println("Result of userInputStream = " + userInputStream);
+
+                    while (userInputStream != null) {
+                        if (userInputStream.equals("/COORDINATOR")){
+                            System.out.println(userInputStream);
+                            String coordinatorInfo = in.nextLine();
+                            String coordtrue = in.nextLine();
+                            if (coordtrue.equals("/COORDINATORTRUE")){
+                                client.setCoordinator(true);
+                            }
+                            break;
+                        }
+                        if (userInputStream.equals("/ALLUSERS")) {
+                            String incomingListIDs = "";
+                            incomingListIDs = in.nextLine();
+                            System.out.println("incoming id = " + incomingListIDs);
+                            while (incomingListIDs != null) {
+                                memberList = createIDListFromInput(incomingListIDs);
+                                client.UpdateGUIUsers(memberList);
+                                System.out.println(memberList);
+                                if (incomingListIDs.contains("/END")) {
+                                    break;
+                                }
+                            }
+
+                        } else if (userInputStream.equals("/SENDMESSAGE")) {
+                            // Update ChatWindow textArea with message
+                            String message = in.nextLine();
+                            client.UpdateChatWindow(client.getUserId(), message);
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<String> createIDListFromInput(String receivedIDList){
+        ArrayList<String> updatedList = new ArrayList<>();
+        String[] parts = receivedIDList.split(",");
+        for(String id : parts){
+            if(!(id.equals("/END"))){
+                updatedList.add(id);
+            }
+        }
+        return updatedList;
     }
 
 
@@ -48,34 +96,31 @@ public class ClientHelper extends Thread {
 
 
     public ArrayList<String> getAllMembers() throws IOException {
-        socket = new Socket();
-        isr = new InputStreamReader(System.in);
-        in = new BufferedReader(isr);
+        in = new Scanner(socket.getInputStream());
         memberList = new ArrayList<>();
-        try {
-            while (client.isConnected())
-                    userInputStream = in.readLine();
-                        while (userInputStream != null) {
-                            if (userInputStream.equals("/ALLUSERS")) {
-                                String incomingListID = "";
-                                incomingListID = in.readLine();
-                                while (incomingListID != null) {
-                                    memberList.add(incomingListID);
-                                }
-                                if (userInputStream.contains("/END")) {
-                                    break;
-                                }
-                            }
-                            else if (userInputStream.equals("/SENDMESSAGE")){
-                                // Update ChatWindow textArea with message
-                                String message = in.readLine();
-                                    client.UpdateChatWindow(client.getUserId(), message);
-                                    break;
-                            }
-                        }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return memberList;
     }
+
+    public void receiveMessage(){
+        String message = in.nextLine();
+        client.UpdateChatWindow(client.getUserId(), message);
+    }
+
+    public synchronized boolean getConnected(){
+        return this.isConnected;
+    }
+
+    public synchronized void setConnected(boolean value){
+        this.isConnected = value;
+    }
+
+    public synchronized Scanner getInputStream(){
+        return this.in;
+    }
+
+    public synchronized void setInputStream(Scanner inputStream){
+        this.in = inputStream;
+    }
+
+
 }

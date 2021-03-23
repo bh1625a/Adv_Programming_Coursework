@@ -117,11 +117,14 @@ public class ServerClientHandler extends Thread{
     }
 
     public void notifyUsers(ArrayList<String> userList){
+        String idlist = "";
         out.println("/ALLUSERS");
         for (String id : userList){
-            out.println(id);
+            idlist += id + ",";
         }
-        out.println("/END");
+        out.println(idlist + "/END");
+        System.out.println("Total userlist: " + userList);
+
     }
     public void setTheCoordinator(){
         out.println("/COORDINATOR");

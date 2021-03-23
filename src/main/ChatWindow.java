@@ -3,6 +3,7 @@ package main;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ChatWindow extends Thread implements UIWindow{
     private JPanel mainPanel;
@@ -13,12 +14,15 @@ public class ChatWindow extends Thread implements UIWindow{
     private JList userListField;
     private JTextArea textArea;
     private JFrame frame = new JFrame("Chat");
+    private DefaultListModel listModel;
 
     private Client client;
     private ClientHelper clientHelper;
 
     public ChatWindow(Client client){
         this.client = client;
+        listModel = new DefaultListModel();
+        userListField.setModel(listModel);
         userInputField.setEditable(false);
         sendMessageButton.setEnabled(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,7 +98,22 @@ public class ChatWindow extends Thread implements UIWindow{
             textArea.setText(msg);
     }
 
-    public void displayMembers() throws IOException {
+
+    public void displayMembers(ArrayList<String> users) throws IOException {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                listModel.removeAllElements();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (String id : users){
+                            listModel.addElement(id);
+                        }
+                    }
+                });
+            }
+        }).start();
     }
 
     public void run(){

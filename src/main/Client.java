@@ -26,8 +26,7 @@ public class Client extends Thread {
 
     private Scanner in;
     private PrintWriter out;
-    private BufferedReader coordinatorIn;
-    private InputStreamReader inputStreamReader;
+
 
 
 
@@ -71,6 +70,8 @@ public class Client extends Thread {
                 out.println(this.id);
                 if (in.nextLine().equals("IDACCEPTED")) {
                     this.isConnected = true;
+                    clientHelper.setConnected(true);
+                    clientHelper.setInputStream(in);
                     this.chatWindow.makeMessageAvailable();
                     closeLoginWindow();
                 } else {
@@ -101,16 +102,15 @@ public class Client extends Thread {
         return this.listOfLocalAddresses;
     }
 
-    public void setIsConnected(boolean value){
+    public synchronized void setIsConnected(boolean value){
         this.isConnected = value;
     }
 
-    public boolean isConnected(){
+    public synchronized boolean isConnected(){
         return isConnected;
     }
 
     public void connectionStatusChange(ConnectionState status){
-
 
     }
 
@@ -144,6 +144,11 @@ public class Client extends Thread {
         // Tells GUI to display message from id
         String updatedMessage = id + ": " + message;
         chatWindow.updateDisplay(updatedMessage);
+    }
+
+    public void UpdateGUIUsers(ArrayList<String> userList) throws IOException {
+        chatWindow.displayMembers(userList);
+
     }
 
     public synchronized void setId(String id){
@@ -194,24 +199,5 @@ public class Client extends Thread {
         this.isCoordinator = value;
     }
 
-    public void receiveCoordinator(){
-        String inputStream = "";
-
-        try {
-            while (socket.isConnected()){
-                inputStream = in.nextLine();
-                if(inputStream.equals("/COORDINATOR")){
-                    String coordinatorDetails = in.nextLine();
-                    String coordinatorMessage = in.nextLine();
-                    if (coordinatorMessage.equals("/COORDINATORTRUE")){
-                        setCoordinator(true);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
 }

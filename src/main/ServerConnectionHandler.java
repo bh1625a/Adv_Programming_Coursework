@@ -67,24 +67,15 @@ public class ServerConnectionHandler extends Thread {
         }
     }
 
-    public void notifyClients(){
+    public void notifyClients() {
         ArrayList<String> listOfCurrentUsers = new ArrayList<>(clientList.keySet());
         Collections.sort(listOfCurrentUsers);
-        for(String id : clientList.keySet()){
+        for (String id : clientList.keySet()) {
             // Create a new thread to handle the client
             ServerClientHandler ch = clientList.get(id);
             // Pass the list of current users to each client
             ch.notifyUsers(listOfCurrentUsers);
         }
     }
-
-//    public void notifyUsers(HashMap<String, ServerClientHandler> userList){
-//        out.println("/ALLUSERS");
-//        for(Map.Entry<String, ServerClientHandler> entry : userList.entrySet()){
-//            String id = entry.getKey();
-//            out.println(id);
-//        }
-//        out.println("/END");
-//    }
 
 }

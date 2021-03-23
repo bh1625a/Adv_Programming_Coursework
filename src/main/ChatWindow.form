@@ -87,11 +87,7 @@
               </grid>
             </constraints>
             <properties>
-              <model>
-                <item value="Ben"/>
-                <item value="Mani"/>
-                <item value="Max"/>
-              </model>
+              <model/>
               <selectionMode value="0"/>
             </properties>
           </component>
