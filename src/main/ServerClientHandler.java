@@ -6,12 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
-public class ClientHandler extends Thread{
-    private ConnectionHandler connectionToHandler;
+public class ServerClientHandler extends Thread{
+    private ServerConnectionHandler connectionToHandler;
     private Socket connectionSocket;
     private boolean isClientConnected = true;
     private String id = "";
@@ -21,13 +19,13 @@ public class ClientHandler extends Thread{
     private Client client;
     private String message;
     private String recipient;
-    private InputStreamReader isr;
-    private BufferedReader bufferedReader;
-    private String userList;
-    private ArrayList listOfUsers;
+    private String coordinatorID;
+    private Integer coordinatorPort;
+    private String coordinatorIP = "";
+    private ServerClientHandler serverClientHandler;
+    private boolean isCoordinator = false;
 
-
-    public ClientHandler(ConnectionHandler connectionToHandler, Socket connectionSocket) throws IOException {
+    public ServerClientHandler(ServerConnectionHandler connectionToHandler, Socket connectionSocket) throws IOException {
         this.connectionToHandler = connectionToHandler;
         this.connectionSocket = connectionSocket;
         this.state = new ConnectedState(this);
@@ -83,6 +81,12 @@ public class ClientHandler extends Thread{
                             // ID is free for use. Add ID to current users
                             out.println("IDACCEPTED");
                             System.out.println("ID accepted");
+                            if(this.connectionToHandler.listOfUsers().size() == 0){
+                                coordinatorID = this.id;
+                                coordinatorPort = this.connectionSocket.getPort();
+                                coordinatorIP = this.connectionSocket.getInetAddress().getHostAddress();
+                                setTheCoordinator();
+                            }
                             this.connectionToHandler.addToClientList(this.id, this);
                             break;
                         }
@@ -120,42 +124,18 @@ public class ClientHandler extends Thread{
         out.println("/END");
     }
     public void setTheCoordinator(){
-        isr = new InputStreamReader(System.in);
-        bufferedReader = new BufferedReader(isr);
-        listOfUsers = new ArrayList();
-
-        try {
-            while (client.isConnected()){
-                userList = bufferedReader.readLine();
-                while(userList != null){
-                    if (userList == "/USERLIST"){
-                        String users = "";
-                        users = bufferedReader.readLine();
-                        while (users != null){
-                            listOfUsers.add(userList);
-                            while (listOfUsers.size() == 0){
-                                this.client.setCoordinator(true);
-                            }
-                        }
-                    }
-                }
-            }
-
-            out.println("/COORDINATOR");
-            for (int i = 0; i<listOfUsers.size(); i++){
-                out.println(this.client.getClientPort() + ":" + this.client.getClientAddress());
-            }
-            out.println("/FINISH");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
+        out.println("/COORDINATOR");
+        out.println(coordinatorID + ":" + coordinatorPort + ":" + coordinatorIP);
+        sendCoordinatorMessage();
+        isCoordinator = true;
     }
-            //client stores state of whether coordinator
-    //client handler connected to connected handler
-    //this.connectionHandler
+
+    public void sendCoordinatorMessage(){
+        out.println("/COORDINATORTRUE");
+    }
+
+    public boolean getCoordinator(){
+        return this.isCoordinator;
+    }
 
 }

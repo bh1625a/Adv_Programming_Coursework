@@ -2,7 +2,7 @@ package main;
 
 public class ConnectedState extends ConnectionState {
 
-    public ConnectedState(ClientHandler ch) {
+    public ConnectedState(ServerClientHandler ch) {
         super(ch);
     }
 

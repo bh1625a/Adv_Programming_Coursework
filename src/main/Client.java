@@ -1,6 +1,8 @@
 package main;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
 import java.util.ArrayList;
@@ -22,9 +24,11 @@ public class Client extends Thread {
     private String clientAddress;
     private String id;
 
-
     private Scanner in;
     private PrintWriter out;
+    private BufferedReader coordinatorIn;
+    private InputStreamReader inputStreamReader;
+
 
 
     public Client(ClientHelper clientHelper) {
@@ -188,6 +192,26 @@ public class Client extends Thread {
 
     public void setCoordinator(boolean value){
         this.isCoordinator = value;
+    }
+
+    public void receiveCoordinator(){
+        String inputStream = "";
+
+        try {
+            while (socket.isConnected()){
+                inputStream = in.nextLine();
+                if(inputStream.equals("/COORDINATOR")){
+                    String coordinatorDetails = in.nextLine();
+                    String coordinatorMessage = in.nextLine();
+                    if (coordinatorMessage.equals("/COORDINATORTRUE")){
+                        setCoordinator(true);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

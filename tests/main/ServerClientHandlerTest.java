@@ -1,6 +1,5 @@
 package main;
 
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,16 +8,16 @@ import java.net.Socket;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ClientHandlerTest {
+class ServerClientHandlerTest {
 
-    private ConnectionHandler connectionHandler;
+    private ServerConnectionHandler serverConnectionHandler;
     private Socket socket;
-    private ClientHandler ch;
+    private ServerClientHandler ch;
 
 void  initialise() throws IOException {
-    connectionHandler = new ConnectionHandler("localhost", 59009);
+    serverConnectionHandler = new ServerConnectionHandler("localhost", 59009);
     socket = new Socket("localhost", 59009);
-    ch = new ClientHandler(connectionHandler, socket);
+    ch = new ServerClientHandler(serverConnectionHandler, socket);
 }
     @AfterEach
     void tearDown() {

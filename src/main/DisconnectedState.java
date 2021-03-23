@@ -1,7 +1,7 @@
 package main;
 
 public class DisconnectedState extends ConnectionState {
-    public DisconnectedState(ClientHandler ch) {
+    public DisconnectedState(ServerClientHandler ch) {
         super(ch);
     }
 

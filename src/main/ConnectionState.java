@@ -1,9 +1,9 @@
 package main;
 
 public abstract class ConnectionState {
-    ClientHandler ch;
+    ServerClientHandler ch;
 
-    public ConnectionState(ClientHandler ch){
+    public ConnectionState(ServerClientHandler ch){
         this.ch = ch;
     }
 
