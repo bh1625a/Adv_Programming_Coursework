@@ -14,6 +14,7 @@ public class ServerConnectionHandler extends Thread {
     private Scanner in;
     private PrintWriter out;
     private HashMap<String, ServerClientHandler> clientList;
+    private ArrayList<String> idList = new ArrayList<>();
 
 
     public ServerConnectionHandler(String serverIP, int serverPort){
@@ -62,20 +63,26 @@ public class ServerConnectionHandler extends Thread {
     }
 
     public void sendMessageToUser(String message, String recipient){
-        if (listOfUsers().containsKey(recipient)){
-            listOfUsers().get(recipient).sendMessage(message);
+        if (clientList.containsKey(recipient)){
+            clientList.get(recipient).sendMessage(message);
         }
     }
 
     public void notifyClients() {
-        ArrayList<String> listOfCurrentUsers = new ArrayList<>(clientList.keySet());
-        Collections.sort(listOfCurrentUsers);
-        for (String id : clientList.keySet()) {
-            // Create a new thread to handle the client
-            ServerClientHandler ch = clientList.get(id);
-            // Pass the list of current users to each client
-            ch.notifyUsers(listOfCurrentUsers);
+        createUserList();
+        for (String id: clientList.keySet()){
+            ServerClientHandler clientHandler = clientList.get(id);
+            clientHandler.notifyUsers(idList);
         }
+    }
+
+    public void createUserList(){
+        idList.clear();
+        for (String id : clientList.keySet()){
+            ServerClientHandler clientHandler = clientList.get(id);
+            idList.add(clientHandler.getID());
+        }
+
     }
 
 }

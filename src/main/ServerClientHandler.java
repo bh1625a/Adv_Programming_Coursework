@@ -34,6 +34,7 @@ public class ServerClientHandler extends Thread{
     }
 
     public void sendMessage(String message){
+        System.out.println("Sending message: " + message);
         out.println("/SENDMESSAGE");
         out.println(message);
     }
@@ -81,13 +82,14 @@ public class ServerClientHandler extends Thread{
                             // ID is free for use. Add ID to current users
                             out.println("IDACCEPTED");
                             System.out.println("ID accepted");
+
                             if(this.connectionToHandler.listOfUsers().size() == 0){
                                 coordinatorID = this.id;
                                 coordinatorPort = this.connectionSocket.getPort();
                                 coordinatorIP = this.connectionSocket.getInetAddress().getHostAddress();
                                 setTheCoordinator();
                             }
-                            this.connectionToHandler.addToClientList(this.id, this);
+                            this.connectionToHandler.addToClientList(id, this);
                             break;
                         }
                     }
@@ -98,6 +100,7 @@ public class ServerClientHandler extends Thread{
 
             String userInputStream = in.nextLine();
             while(userInputStream != null){
+                System.out.println("ServerSide userInputStream: " + userInputStream);
                 if(userInputStream.equals("/SENDMESSAGE")){
                     this.recipient = in.nextLine();
                     this.message = in.nextLine();
@@ -123,8 +126,6 @@ public class ServerClientHandler extends Thread{
             idlist += id + ",";
         }
         out.println(idlist + "/END");
-        System.out.println("Total userlist: " + userList);
-
     }
     public void setTheCoordinator(){
         out.println("/COORDINATOR");

@@ -1,8 +1,6 @@
 package main;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
 import java.util.ArrayList;
@@ -143,7 +141,7 @@ public class Client extends Thread {
     public void UpdateChatWindow(String id, String message){
         // Tells GUI to display message from id
         String updatedMessage = id + ": " + message;
-        chatWindow.updateDisplay(updatedMessage);
+        chatWindow.updateMessageDisplay(updatedMessage);
     }
 
     public void UpdateGUIUsers(ArrayList<String> userList) throws IOException {

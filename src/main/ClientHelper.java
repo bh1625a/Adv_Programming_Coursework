@@ -23,16 +23,13 @@ public class ClientHelper extends Thread {
     public void run(){
         try {
             client = new Client(this);
-            System.out.println(getConnected());
             while(true) {
                 if (getConnected()) {
-                    System.out.println(getConnected());
                     userInputStream = in.nextLine();
                     System.out.println("Result of userInputStream = " + userInputStream);
 
                     while (userInputStream != null) {
                         if (userInputStream.equals("/COORDINATOR")){
-                            System.out.println(userInputStream);
                             String coordinatorInfo = in.nextLine();
                             String coordtrue = in.nextLine();
                             if (coordtrue.equals("/COORDINATORTRUE")){
@@ -44,11 +41,15 @@ public class ClientHelper extends Thread {
                             String incomingListIDs = "";
                             incomingListIDs = in.nextLine();
                             System.out.println("incoming id = " + incomingListIDs);
+
                             while (incomingListIDs != null) {
                                 memberList = createIDListFromInput(incomingListIDs);
                                 client.UpdateGUIUsers(memberList);
-                                System.out.println(memberList);
+                                System.out.println("The memberlist contents: " + memberList);
                                 if (incomingListIDs.contains("/END")) {
+                                    break;
+                                } else {
+                                    System.out.println("Somethings gone wrong");
                                     break;
                                 }
                             }
@@ -56,6 +57,7 @@ public class ClientHelper extends Thread {
                         } else if (userInputStream.equals("/SENDMESSAGE")) {
                             // Update ChatWindow textArea with message
                             String message = in.nextLine();
+                            System.out.println("The received message from server is " + message);
                             client.UpdateChatWindow(client.getUserId(), message);
                             break;
                         }

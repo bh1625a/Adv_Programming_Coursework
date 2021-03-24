@@ -33,8 +33,8 @@ public class ChatWindow extends Thread implements UIWindow{
             public void actionPerformed(ActionEvent e) {
                 try {
                     String recipient = (String) userListField.getSelectedValue();
-                    String input = userInputField.getText();
-                    client.sendMessage(input, recipient);
+                    String messageContents = userInputField.getText();
+                    client.sendMessage(messageContents, recipient);
                 } catch (NullPointerException ne) {
                     ne.getMessage();
                 }
@@ -92,10 +92,21 @@ public class ChatWindow extends Thread implements UIWindow{
         });
     }
 
-    public void updateDisplay(String message){
-            String msg = "";
-            msg += message + "\n";
-            textArea.setText(msg);
+    public void updateMessageDisplay(String message){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        String msg = "";
+                        msg += message + "\n";
+                        textArea.setText(msg);
+                    }
+                });
+            }
+        }).start();
+
     }
 
 
