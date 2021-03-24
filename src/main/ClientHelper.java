@@ -53,6 +53,7 @@ public class ClientHelper extends Thread {
                                     break;
                                 }
                             }
+                            break;
 
                         } else if (userInputStream.equals("/SENDMESSAGE")) {
                             // Update ChatWindow textArea with message
