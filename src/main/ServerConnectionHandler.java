@@ -24,7 +24,7 @@ public class ServerConnectionHandler extends Thread {
         super.start();
     }
     
-    public void addToClientList(String ID, ServerClientHandler clientConnection){
+    public synchronized void addToClientList(String ID, ServerClientHandler clientConnection){
         this.clientList.put(ID,clientConnection);
         notifyClients();
     }
@@ -62,19 +62,21 @@ public class ServerConnectionHandler extends Thread {
         return clientList;
     }
 
-    public void sendMessageToUser(String message, String recipient){
+    public void sendMessageToUser(String message, String recipient, String sender){
         if (clientList.containsKey(recipient)){
-            clientList.get(recipient).sendMessage(message);
+            clientList.get(recipient).sendMessage(sender + ": " + message);
         }
     }
 
     public void notifyClients() {
         createUserList();
+        Collections.sort(idList);
         for (String id: clientList.keySet()){
             ServerClientHandler clientHandler = clientList.get(id);
             clientHandler.notifyUsers(idList);
         }
     }
+
 
     public void createUserList(){
         idList.clear();
@@ -82,7 +84,7 @@ public class ServerConnectionHandler extends Thread {
             ServerClientHandler clientHandler = clientList.get(id);
             idList.add(clientHandler.getID());
         }
-
     }
+
 
 }

@@ -91,9 +91,11 @@ public class Client extends Thread {
     }
 
     public void sendMessage(String message, String recipient){
+        String sender = this.getUserId();
         this.out.println("/SENDMESSAGE");
         this.out.println(recipient);
         this.out.println(message);
+        this.out.println(sender);
     }
 
     public ArrayList<String> getListOfLocalAddresses(){
@@ -140,11 +142,10 @@ public class Client extends Thread {
 
     public void UpdateChatWindow(String id, String message){
         // Tells GUI to display message from id
-        String updatedMessage = id + ": " + message;
-        chatWindow.updateMessageDisplay(updatedMessage);
+        chatWindow.updateMessageDisplay(message);
     }
 
-    public void UpdateGUIUsers(ArrayList<String> userList) throws IOException {
+    public void UpdateOnlineUsers(ArrayList<String> userList) throws IOException {
         chatWindow.displayMembers(userList);
 
     }

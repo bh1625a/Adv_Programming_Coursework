@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class ServerClientHandler extends Thread{
@@ -24,6 +25,7 @@ public class ServerClientHandler extends Thread{
     private String coordinatorIP = "";
     private ServerClientHandler serverClientHandler;
     private boolean isCoordinator = false;
+    private String userListResponse = "";
 
     public ServerClientHandler(ServerConnectionHandler connectionToHandler, Socket connectionSocket) throws IOException {
         this.connectionToHandler = connectionToHandler;
@@ -104,7 +106,8 @@ public class ServerClientHandler extends Thread{
                 if(userInputStream.equals("/SENDMESSAGE")){
                     this.recipient = in.nextLine();
                     this.message = in.nextLine();
-                    connectionToHandler.sendMessageToUser(message, recipient);
+                    String sender = in.nextLine();
+                    connectionToHandler.sendMessageToUser(message, recipient, sender);
                     break;
                 }
 
@@ -122,6 +125,7 @@ public class ServerClientHandler extends Thread{
     public void notifyUsers(ArrayList<String> userList){
         String idlist = "";
         out.println("/ALLUSERS");
+        System.out.println("Contents of userlist: " + userList);
         for (String id : userList){
             idlist += id + ",";
         }
@@ -130,7 +134,7 @@ public class ServerClientHandler extends Thread{
     public void setTheCoordinator(){
         out.println("/COORDINATOR");
         out.println(coordinatorID + ":" + coordinatorPort + ":" + coordinatorIP);
-        sendCoordinatorMessage();
+        out.println("/COORDINATORTRUE");
         isCoordinator = true;
     }
 
@@ -141,5 +145,7 @@ public class ServerClientHandler extends Thread{
     public boolean getCoordinator(){
         return this.isCoordinator;
     }
+
+
 
 }

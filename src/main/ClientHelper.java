@@ -3,6 +3,7 @@ package main;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class ClientHelper extends Thread {
@@ -23,46 +24,35 @@ public class ClientHelper extends Thread {
     public void run(){
         try {
             client = new Client(this);
-            while(true) {
-                if (getConnected()) {
-                    userInputStream = in.nextLine();
-                    System.out.println("Result of userInputStream = " + userInputStream);
-
-                    while (userInputStream != null) {
-                        if (userInputStream.equals("/COORDINATOR")){
+            while (true){
+                if(getConnected()) {
+                    while (in.hasNextLine()) {
+                        String inputStream = in.nextLine();
+                        System.out.println(inputStream);
+                        System.out.println("-----------------------------------------------------------");
+                        if (inputStream.equals("/COORDINATOR")){
                             String coordinatorInfo = in.nextLine();
-                            String coordtrue = in.nextLine();
-                            if (coordtrue.equals("/COORDINATORTRUE")){
+                            String coordValue = in.nextLine();
+                            if (coordValue.equals("/COORDINATORTRUE")){
                                 client.setCoordinator(true);
+                                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                             }
-                            break;
-                        }
-                        if (userInputStream.equals("/ALLUSERS")) {
-                            String incomingListIDs = "";
-                            incomingListIDs = in.nextLine();
-                            System.out.println("incoming id = " + incomingListIDs);
-
-                            while (incomingListIDs != null) {
-                                memberList = createIDListFromInput(incomingListIDs);
-                                client.UpdateGUIUsers(memberList);
-                                System.out.println("The memberlist contents: " + memberList);
-                                if (incomingListIDs.contains("/END")) {
-                                    break;
-                                } else {
-                                    System.out.println("Somethings gone wrong");
-                                    break;
-                                }
+                        } else if (inputStream.equals("/ALLUSERS")) {
+                            String incomingID = in.nextLine();
+                            System.out.println("IncomingID: " + incomingID);
+                            memberList = createIDListFromInput(incomingID);
+                            client.UpdateOnlineUsers(memberList);
+                            if (incomingID.contains("/END")){
+                                break;
                             }
-                            break;
-
-                        } else if (userInputStream.equals("/SENDMESSAGE")) {
-                            // Update ChatWindow textArea with message
+                        } else if (inputStream.equals("/SENDMESSAGE")){
                             String message = in.nextLine();
-                            System.out.println("The received message from server is " + message);
-                            client.UpdateChatWindow(client.getUserId(), message);
-                            break;
+                            System.out.println("message is " + message);
                         }
                     }
+                    System.out.println("GOT OUTSIDE LOOP");
+                    System.out.println();
+
                 }
             }
         } catch (Exception e) {
