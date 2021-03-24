@@ -49,6 +49,7 @@ public class LoginWindow implements UIWindow {
             frame.setContentPane(getPanel());
             frame.pack();
             frame.setLocationRelativeTo(null); // centres the window
+            frame.setResizable(false);
             frame.setVisible(true);
     }
 

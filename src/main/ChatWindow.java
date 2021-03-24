@@ -51,6 +51,15 @@ public class ChatWindow extends Thread implements UIWindow{
                 textArea.append("\n");
             }
         });
+
+        userListField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                textArea.append("\n"+"ID:"+client.getUserId()+"\n"+"Port:"+client.getClientPort()+"\n"
+                        +"IP:"+client.getClientAddress());
+                super.mouseClicked(e);
+            }
+        });
     }
 
     @Override
