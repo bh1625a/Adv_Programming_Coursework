@@ -15,6 +15,7 @@ public class ChatWindow extends Thread implements UIWindow{
     private JTextArea textArea;
     private JFrame frame = new JFrame("Chat");
     private DefaultListModel listModel;
+    private String msg = "";
 
     private Client client;
     private ClientHelper clientHelper;
@@ -102,19 +103,11 @@ public class ChatWindow extends Thread implements UIWindow{
     }
 
     public void updateMessageDisplay(String message){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        String msg = "";
-                        msg += message + "\n";
-                        textArea.setText(msg);
-                    }
-                });
-            }
-        }).start();
+        new Thread(() -> SwingUtilities.invokeLater(() -> {
+//            String msg = "";
+            msg += message + "\n";
+            textArea.setText(msg);
+        })).start();
 
     }
 

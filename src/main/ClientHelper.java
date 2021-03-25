@@ -47,9 +47,11 @@ public class ClientHelper extends Thread {
                             if (incomingID.contains("/END")){
                                 break;
                             }
-                        } else if (inputStream.equals("/SENDMESSAGE")){
+                        } else if (inputStream.equals("/RECEIVEMESSAGE")){
                             String message = in.nextLine();
-                            System.out.println("message is " + message);
+                            System.out.println("Message received by client: " + message);
+                            client.UpdateChatWindow(message);
+
                         }
                     }
                     System.out.println("GOT OUTSIDE LOOP");
@@ -74,31 +76,10 @@ public class ClientHelper extends Thread {
     }
 
 
-    public void sendMemberDetails() throws IOException {
-        try {
-            socket = new Socket();
-
-            while (client.isConnected()) {
-                out = new PrintWriter(socket.getOutputStream(), true);
-                out.println("SUBMITUSERLIST");
-                userList = client.getClientAddress() + "," + client.getClientPort();
-                out.println(userList);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public ArrayList<String> getAllMembers() throws IOException {
         in = new Scanner(socket.getInputStream());
         memberList = new ArrayList<>();
         return memberList;
-    }
-
-    public void receiveMessage(){
-        String message = in.nextLine();
-        client.UpdateChatWindow(client.getUserId(), message);
     }
 
     public synchronized boolean getConnected(){

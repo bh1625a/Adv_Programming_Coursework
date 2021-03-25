@@ -63,6 +63,14 @@ public class ServerConnectionHandler extends Thread {
     }
 
     public void sendMessageToUser(String message, String recipient, String sender){
+        System.out.println("outside clientlist.containskey if statement");
+        System.out.println("recipient before split: " + recipient);
+        String parts[] = recipient.split(":");
+        recipient = parts[0];
+        System.out.println(clientList.keySet());
+        System.out.println(clientList.containsKey(recipient));
+
+
         if (clientList.containsKey(recipient)){
             clientList.get(recipient).sendMessage(sender + ": " + message);
         }

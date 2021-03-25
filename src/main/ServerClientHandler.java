@@ -125,7 +125,7 @@ public class ServerClientHandler extends Thread {
 
     public void sendMessage(String message) {
         System.out.println("Sending message: " + message);
-        out.println("/SENDMESSAGE");
+        out.println("/RECEIVEMESSAGE");
         out.println(message);
     }
 
