@@ -16,9 +16,10 @@ public class ChatWindow extends Thread implements UIWindow{
     private JFrame frame = new JFrame("Chat");
     private DefaultListModel listModel;
     private String msg = "";
-
     private Client client;
     private ClientHelper clientHelper;
+
+
 
     public ChatWindow(Client client){
         this.client = client;
@@ -28,6 +29,18 @@ public class ChatWindow extends Thread implements UIWindow{
         sendMessageButton.setEnabled(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userQuits();
+
+
+        // on close window the close method is called
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt)
+            {
+                closeWindow();
+            }
+        });
+
+
 
 
         sendMessageButton.addActionListener(new ActionListener() {
@@ -66,6 +79,8 @@ public class ChatWindow extends Thread implements UIWindow{
 
     }
 
+
+
     @Override
     public void openWindow(){
         frame.setContentPane(getPanel());
@@ -98,6 +113,7 @@ public class ChatWindow extends Thread implements UIWindow{
             public void windowClosing(WindowEvent e) {
                 // Call code to remove from list of active users
                 // ADD CODE HERE
+                client.userQuit();
                 System.out.println("Closing window");
                 e.getWindow().dispose();
 
@@ -146,12 +162,5 @@ public class ChatWindow extends Thread implements UIWindow{
                 "No user selected",
                 JOptionPane.ERROR_MESSAGE);
     }
-
-
-
-    public void run(){
-        //updateDisplay("Whatever");
-    }
-
 
 }

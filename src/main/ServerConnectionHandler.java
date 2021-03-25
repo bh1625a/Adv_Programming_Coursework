@@ -60,6 +60,11 @@ public class ServerConnectionHandler extends Thread {
         notifyClients();
     }
 
+    public synchronized void removeFromClientList(String ID){
+        this.clientList.remove(ID);
+        notifyClients();
+    }
+
     public HashMap<String, ServerClientHandler> listOfUsers(){
         return clientList;
     }

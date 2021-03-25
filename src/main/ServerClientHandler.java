@@ -42,7 +42,6 @@ public class ServerClientHandler extends Thread {
                 if (state.toString().equals("Connected")) {
                     if (this.id == null) {
                         this.id = in.nextLine();
-                        System.out.println("this id = " + this.id);
 
                         while (id != null) {
                             System.out.println("Checking ID supplied: " + this.id);
@@ -78,13 +77,16 @@ public class ServerClientHandler extends Thread {
                     String messageInputStream = in.nextLine();
 
                     while(messageInputStream != null){
-                        System.out.println("ServerSide messageInputStream: " + messageInputStream);
                         if(messageInputStream.equals("/SENDMESSAGE")){
                             this.recipient = in.nextLine();
                             this.message = in.nextLine();
                             String sender = in.nextLine();
                             connectionToHandler.sendMessageToUser(message, recipient, sender);
                             break;
+                        } else if (messageInputStream.equals("/USERQUIT")){
+                            String clientQuitting = in.nextLine();
+                            System.out.println("Client quitting: " + clientQuitting);
+                            connectionToHandler.removeFromClientList(clientQuitting);
                         }
                     }
 

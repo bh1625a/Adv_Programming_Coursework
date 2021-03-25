@@ -98,6 +98,12 @@ public class Client extends Thread {
         this.out.println(sender);
     }
 
+    public void userQuit(){
+        System.out.println("This users id: " + this.getUserId());
+        this.out.println("/USERQUIT");
+        this.out.println(this.getUserId());
+    }
+
     public ArrayList<String> getListOfLocalAddresses(){
         return this.listOfLocalAddresses;
     }
