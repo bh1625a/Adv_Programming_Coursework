@@ -15,12 +15,14 @@ public class ServerConnectionHandler extends Thread {
     private PrintWriter out;
     private HashMap<String, ServerClientHandler> clientList;
     private ArrayList<String> idList = new ArrayList<>();
+    private Coordinator coordinator;
 
 
     public ServerConnectionHandler(String serverIP, int serverPort){
         this.serverIP = serverIP;
         this.serverPort = serverPort;
         this.clientList = new HashMap<>();
+        coordinator = new Coordinator();
         super.start();
     }
 
@@ -63,8 +65,6 @@ public class ServerConnectionHandler extends Thread {
     }
 
     public void sendMessageToUser(String message, String recipient, String sender){
-        System.out.println("outside clientlist.containskey if statement");
-        System.out.println("recipient before split: " + recipient);
         String parts[] = recipient.split(":");
         recipient = parts[0];
         System.out.println(clientList.keySet());
@@ -94,5 +94,8 @@ public class ServerConnectionHandler extends Thread {
         }
     }
 
+    public Coordinator getCoordinatorObject(){
+        return this.coordinator;
+    }
 
 }

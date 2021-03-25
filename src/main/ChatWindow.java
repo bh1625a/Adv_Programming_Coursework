@@ -29,12 +29,22 @@ public class ChatWindow extends Thread implements UIWindow{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userQuits();
 
+
         sendMessageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
                     String recipient = (String) userListField.getSelectedValue();
                     String messageContents = userInputField.getText();
+
+                    if (!(userListField.isSelectionEmpty())) {
+                        userInputField.setText("");
+                        textArea.append("Me: " + messageContents + "\n");
+                    } else {
+                        noIDSelectedWarning();
+                    }
+
+
                     client.sendMessage(messageContents, recipient);
                 } catch (NullPointerException ne) {
                     ne.getMessage();
@@ -53,14 +63,7 @@ public class ChatWindow extends Thread implements UIWindow{
             }
         });
 
-        userListField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                textArea.append("\n"+"ID:"+client.getUserId()+"\n"+"Port:"+client.getClientPort()+"\n"
-                        +"IP:"+client.getClientAddress());
-                super.mouseClicked(e);
-            }
-        });
+
     }
 
     @Override
@@ -106,7 +109,7 @@ public class ChatWindow extends Thread implements UIWindow{
         new Thread(() -> SwingUtilities.invokeLater(() -> {
 //            String msg = "";
             msg += message + "\n";
-            textArea.setText(msg);
+            textArea.append(msg);
         })).start();
 
     }
@@ -127,6 +130,21 @@ public class ChatWindow extends Thread implements UIWindow{
                 });
             }
         }).start();
+    }
+
+    public void displayFirstMember(){
+        textArea.setText("You are the first client to join (and have been assigned as coordinator)\n");
+    }
+
+    public void displayCoordinatorInfo(String id, int port, String ip){
+        textArea.append("Coordinator is : " + id + " port: " + port + " IP address: " + ip + "\n");
+    }
+
+    public void noIDSelectedWarning(){
+        JOptionPane.showMessageDialog(frame,
+                "You have to select an ID from the list",
+                "No user selected",
+                JOptionPane.ERROR_MESSAGE);
     }
 
 

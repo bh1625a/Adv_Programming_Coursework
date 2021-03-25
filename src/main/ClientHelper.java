@@ -15,9 +15,11 @@ public class ClientHelper extends Thread {
     private String userList;
     private ArrayList<String> memberList;
     private boolean isConnected = false;
+    private Coordinator coordinator;
 
 
     public ClientHelper(){
+        coordinator = new Coordinator();
         super.start();
     }
 
@@ -36,7 +38,7 @@ public class ClientHelper extends Thread {
                             String coordValue = in.nextLine();
                             if (coordValue.equals("/COORDINATORTRUE")){
                                 client.setCoordinator(true);
-                                System.out.println("Is coordinator? " + client.isTheCoordinator());
+                                client.chatWindowFirstMember();
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                             }
                         } else if (inputStream.equals("/ALLUSERS")) {
@@ -51,6 +53,17 @@ public class ClientHelper extends Thread {
                             String message = in.nextLine();
                             System.out.println("Message received by client: " + message);
                             client.UpdateChatWindow(message);
+
+                        } else if (inputStream.equals("/SENDCOORDINATORDETAILS")){
+                            String coordDetails = in.nextLine();
+                            String[] parts = coordDetails.split(":");
+
+                            coordinator.setId(parts[0]);
+                            coordinator.setPort(Integer.valueOf(parts[1]));
+                            coordinator.setIp(parts[2]);
+
+                            client.updateCoordinatorDetails(coordinator.getId(), coordinator.getPort(), coordinator.getIp());
+
 
                         }
                     }

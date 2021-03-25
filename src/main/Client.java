@@ -150,6 +150,14 @@ public class Client extends Thread {
 
     }
 
+    public void chatWindowFirstMember(){
+        chatWindow.displayFirstMember();
+    }
+
+    public void updateCoordinatorDetails(String id, int port, String ip){
+        chatWindow.displayCoordinatorInfo(id, port, ip);
+    }
+
 
     public synchronized void setId(String id){
         this.id = id;

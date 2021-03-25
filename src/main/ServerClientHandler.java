@@ -59,16 +59,21 @@ public class ServerClientHandler extends Thread {
                                 currentClientIP = this.connectionSocket.getInetAddress().getHostAddress();
 
                                 if(this.connectionToHandler.listOfUsers().size() == 0){
-
                                     setTheCoordinator();
                                 }
 
-
                                 connectionToHandler.addToClientList(this.id, this);
+                                out.println("/SENDCOORDINATORDETAILS");
+                                System.out.println(connectionToHandler.getCoordinatorObject().getId());
+                                Coordinator coordDetails = connectionToHandler.getCoordinatorObject();
+                                out.println(coordDetails.getId() + ":" + coordDetails.getPort() + ":" + coordDetails.getIp());
+
+
                                 break;
                             }
                         } // ID has been accepted
                     }
+
 
                     String messageInputStream = in.nextLine();
 
@@ -105,7 +110,12 @@ public class ServerClientHandler extends Thread {
     }
     public void setTheCoordinator(){
         out.println("/COORDINATOR");
+        connectionToHandler.getCoordinatorObject().setId(currentClientID);
+        connectionToHandler.getCoordinatorObject().setPort(currentClientPort);
+        connectionToHandler.getCoordinatorObject().setIp(currentClientIP);
+
         out.println(currentClientID + ":" + currentClientPort + ":" + currentClientIP);
+
         out.println("/COORDINATORTRUE");
         isCoordinator = true;
     }
