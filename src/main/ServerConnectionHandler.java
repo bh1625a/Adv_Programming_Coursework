@@ -23,11 +23,6 @@ public class ServerConnectionHandler extends Thread {
         this.clientList = new HashMap<>();
         super.start();
     }
-    
-    public synchronized void addToClientList(String ID, ServerClientHandler clientConnection){
-        this.clientList.put(ID,clientConnection);
-        notifyClients();
-    }
 
 
     @Override
@@ -56,6 +51,11 @@ public class ServerConnectionHandler extends Thread {
 
 
         }
+    }
+
+    public synchronized void addToClientList(String ID, ServerClientHandler clientConnection){
+        this.clientList.put(ID,clientConnection);
+        notifyClients();
     }
 
     public HashMap<String, ServerClientHandler> listOfUsers(){

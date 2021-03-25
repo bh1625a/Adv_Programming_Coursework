@@ -34,32 +34,6 @@ public class ServerClientHandler extends Thread {
         super.start();
     }
 
-    public void sendMessage(String message) {
-        System.out.println("Sending message: " + message);
-        out.println("/SENDMESSAGE");
-        out.println(message);
-    }
-
-    public void setID(String id) {
-        this.id = id;
-    }
-
-    public String getID() {
-        return this.id;
-    }
-
-    public void sendCurrentUserList() {
-        out.println("SUBMITUSERLIST");
-
-    }
-
-    public void changeState(ConnectionState state) {
-        this.state = state;
-    }
-
-    public ConnectionState getConnectionState() {
-        return state;
-    }
 
     @Override
     public void run() {
@@ -147,5 +121,28 @@ public class ServerClientHandler extends Thread {
 
     public String getCurrentClientIP() {
         return currentClientIP;
+    }
+
+    public void sendMessage(String message) {
+        System.out.println("Sending message: " + message);
+        out.println("/SENDMESSAGE");
+        out.println(message);
+    }
+
+    public void setID(String id) {
+        this.id = id;
+    }
+
+    public String getID() {
+        return this.id;
+    }
+
+
+    public void changeState(ConnectionState state) {
+        this.state = state;
+    }
+
+    public ConnectionState getConnectionState() {
+        return state;
     }
 }
