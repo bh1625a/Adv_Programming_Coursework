@@ -150,6 +150,7 @@ public class Client extends Thread {
 
     }
 
+
     public synchronized void setId(String id){
         this.id = id;
     }
@@ -196,6 +197,10 @@ public class Client extends Thread {
 
     public void setCoordinator(boolean value){
         this.isCoordinator = value;
+    }
+
+    public boolean isTheCoordinator(){
+        return isCoordinator;
     }
 
 

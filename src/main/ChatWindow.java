@@ -136,6 +136,8 @@ public class ChatWindow extends Thread implements UIWindow{
         }).start();
     }
 
+
+
     public void run(){
         //updateDisplay("Whatever");
     }

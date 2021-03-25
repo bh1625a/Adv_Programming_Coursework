@@ -32,9 +32,11 @@ public class ClientHelper extends Thread {
                         System.out.println("-----------------------------------------------------------");
                         if (inputStream.equals("/COORDINATOR")){
                             String coordinatorInfo = in.nextLine();
+                            String[] coordArray = coordinatorInfo.split(":");
                             String coordValue = in.nextLine();
                             if (coordValue.equals("/COORDINATORTRUE")){
                                 client.setCoordinator(true);
+                                System.out.println("Is coordinator? " + client.isTheCoordinator());
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                             }
                         } else if (inputStream.equals("/ALLUSERS")) {

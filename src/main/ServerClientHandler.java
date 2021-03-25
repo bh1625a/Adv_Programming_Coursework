@@ -1,8 +1,6 @@
 package main;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -20,9 +18,9 @@ public class ServerClientHandler extends Thread {
     private Client client;
     private String message;
     private String recipient;
-    private String coordinatorID;
-    private Integer coordinatorPort;
-    private String coordinatorIP = "";
+    private String currentClientID;
+    private Integer currentClientPort;
+    private String currentClientIP = "";
     private ServerClientHandler serverClientHandler;
     private boolean isCoordinator = false;
     private String userListResponse = "";
@@ -69,7 +67,6 @@ public class ServerClientHandler extends Thread {
             try {
                 if (state.toString().equals("Connected")) {
                     if (this.id == null) {
-                        System.out.println("ID empty");
                         this.id = in.nextLine();
                         System.out.println("this id = " + this.id);
 
@@ -83,6 +80,16 @@ public class ServerClientHandler extends Thread {
                             } else {
                                 out.println("/IDACCEPTED");
                                 System.out.println("ID " + this.id + " accepted");
+                                currentClientID = this.id;
+                                currentClientPort = this.connectionSocket.getPort();
+                                currentClientIP = this.connectionSocket.getInetAddress().getHostAddress();
+
+                                if(this.connectionToHandler.listOfUsers().size() == 0){
+
+                                    setTheCoordinator();
+                                }
+
+
                                 connectionToHandler.addToClientList(this.id, this);
                                 break;
                             }
@@ -119,23 +126,26 @@ public class ServerClientHandler extends Thread {
         for (String id : userList){
             idlist += id + ",";
         }
+
         out.println(idlist + "/END");
     }
     public void setTheCoordinator(){
         out.println("/COORDINATOR");
-        out.println(coordinatorID + ":" + coordinatorPort + ":" + coordinatorIP);
+        out.println(currentClientID + ":" + currentClientPort + ":" + currentClientIP);
         out.println("/COORDINATORTRUE");
         isCoordinator = true;
     }
 
-    public void sendCoordinatorMessage(){
-        out.println("/COORDINATORTRUE");
-    }
 
     public boolean getCoordinator(){
         return this.isCoordinator;
     }
 
+    public Integer getCurrentClientPort() {
+        return currentClientPort;
+    }
 
-
+    public String getCurrentClientIP() {
+        return currentClientIP;
+    }
 }

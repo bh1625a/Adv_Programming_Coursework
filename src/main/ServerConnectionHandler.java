@@ -82,7 +82,7 @@ public class ServerConnectionHandler extends Thread {
         idList.clear();
         for (String id : clientList.keySet()){
             ServerClientHandler clientHandler = clientList.get(id);
-            idList.add(clientHandler.getID());
+            idList.add(clientHandler.getID() + ":" + clientHandler.getCurrentClientPort() + ":" + clientHandler.getCurrentClientIP());
         }
     }
 
