@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class ServerClientHandler extends Thread{
+public class ServerClientHandler extends Thread {
     private ServerConnectionHandler connectionToHandler;
     private Socket connectionSocket;
     private boolean isClientConnected = true;
-    private String id = "";
+    private String id = null;
     private Scanner in;
     private PrintWriter out;
     private ConnectionState state;
@@ -31,94 +31,84 @@ public class ServerClientHandler extends Thread{
         this.connectionToHandler = connectionToHandler;
         this.connectionSocket = connectionSocket;
         this.state = new ConnectedState(this);
+        in = new Scanner(connectionSocket.getInputStream());
+        out = new PrintWriter(connectionSocket.getOutputStream(), true);
         super.start();
-
     }
 
-    public void sendMessage(String message){
+    public void sendMessage(String message) {
         System.out.println("Sending message: " + message);
         out.println("/SENDMESSAGE");
         out.println(message);
     }
 
-    public void setID(String id){
+    public void setID(String id) {
         this.id = id;
     }
 
-    public String getID(){
+    public String getID() {
         return this.id;
     }
 
-    public void sendCurrentUserList(){
+    public void sendCurrentUserList() {
         out.println("SUBMITUSERLIST");
 
     }
 
-    public void changeState(ConnectionState state){
+    public void changeState(ConnectionState state) {
         this.state = state;
     }
 
-    public ConnectionState getConnectionState(){
+    public ConnectionState getConnectionState() {
         return state;
     }
 
     @Override
-    public void run()  {
-
-        try {
-            in = new Scanner(connectionSocket.getInputStream());
-            out = new PrintWriter(connectionSocket.getOutputStream(), true);
-            while(true) {
+    public void run() {
+        while (true) {
+            try {
                 if (state.toString().equals("Connected")) {
-                    this.id = in.nextLine();
-                    if (id == null) {
-                        System.out.println("Id was empty. Something has gone wrong.");
-                    } else {
-                        System.out.println("Checking ID " + this.id);
-                        if (this.connectionToHandler.listOfUsers().containsKey(id)) {
-                            // ID already exists
-                            out.println("INVALIDID");
-                            connectionSocket.close();
-                            System.out.println("ID " + this.id + " is already taken.");
-                        } else {
-                            // ID is free for use. Add ID to current users
-                            out.println("IDACCEPTED");
-                            System.out.println("ID accepted");
+                    if (this.id == null) {
+                        System.out.println("ID empty");
+                        this.id = in.nextLine();
+                        System.out.println("this id = " + this.id);
 
-                            if(this.connectionToHandler.listOfUsers().size() == 0){
-                                coordinatorID = this.id;
-                                coordinatorPort = this.connectionSocket.getPort();
-                                coordinatorIP = this.connectionSocket.getInetAddress().getHostAddress();
-                                setTheCoordinator();
+                        while (id != null) {
+                            System.out.println("Checking ID supplied: " + this.id);
+                            if (this.connectionToHandler.listOfUsers().containsKey(id)) {
+                                // ID already exists
+                                out.println("INVALIDID");
+                                connectionSocket.close();
+                                System.out.println("ID " + this.id + " is already taken.");
+                            } else {
+                                out.println("/IDACCEPTED");
+                                System.out.println("ID " + this.id + " accepted");
+                                connectionToHandler.addToClientList(this.id, this);
+                                break;
                             }
-                            this.connectionToHandler.addToClientList(id, this);
+                        } // ID has been accepted
+                    }
+
+                    String messageInputStream = in.nextLine();
+
+                    while(messageInputStream != null){
+                        System.out.println("ServerSide messageInputStream: " + messageInputStream);
+                        if(messageInputStream.equals("/SENDMESSAGE")){
+                            this.recipient = in.nextLine();
+                            this.message = in.nextLine();
+                            String sender = in.nextLine();
+                            connectionToHandler.sendMessageToUser(message, recipient, sender);
                             break;
                         }
                     }
-                } else {
-                    System.out.println("Client is not connected.");
-                }
-            } // Checking username loop ends here
 
-            String userInputStream = in.nextLine();
-            while(userInputStream != null){
-                System.out.println("ServerSide userInputStream: " + userInputStream);
-                if(userInputStream.equals("/SENDMESSAGE")){
-                    this.recipient = in.nextLine();
-                    this.message = in.nextLine();
-                    String sender = in.nextLine();
-                    connectionToHandler.sendMessageToUser(message, recipient, sender);
-                    break;
-                }
 
+                }
+            } catch (Exception e) {
+                e.getMessage();
             }
 
-        }
-
-
-        catch (Exception e){
-            e.getMessage();
-        }
+        } // while true ends here
 
     }
 

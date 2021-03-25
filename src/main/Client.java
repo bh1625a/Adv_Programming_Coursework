@@ -66,7 +66,7 @@ public class Client extends Thread {
                 in = new Scanner(socket.getInputStream());
                 out = new PrintWriter(socket.getOutputStream(),true);
                 out.println(this.id);
-                if (in.nextLine().equals("IDACCEPTED")) {
+                if (in.nextLine().equals("/IDACCEPTED")) {
                     this.isConnected = true;
                     clientHelper.setConnected(true);
                     clientHelper.setInputStream(in);
