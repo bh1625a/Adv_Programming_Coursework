@@ -1,31 +1,24 @@
 package main;
 
-import java.io.*;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class ClientHelper extends Thread {
     private Client client;
-    private Socket socket;
-    private PrintWriter out;
     private Scanner in;
-    private String userInputStream = "";
-    private String userList;
     private ArrayList<String> memberList;
     private boolean isConnected = false;
     private Coordinator coordinator;
 
 
     public ClientHelper(){
-        coordinator = new Coordinator();
         super.start();
     }
 
     public void run(){
         try {
             client = new Client(this);
+            coordinator = new Coordinator(this, this.client);
             while (true){
                 if(getConnected()) {
                     while (in.hasNextLine()) {
@@ -39,12 +32,15 @@ public class ClientHelper extends Thread {
                             if (coordValue.equals("/COORDINATORTRUE")){
                                 client.setCoordinator(true);
                                 client.chatWindowFirstMember();
+                                client.sendClientPing();
                                 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
                             }
                         } else if (inputStream.equals("/ALLUSERS")) {
                             String incomingID = in.nextLine();
                             System.out.println("IncomingID: " + incomingID);
                             memberList = createIDListFromInput(incomingID);
+//                            coordinator.buildHashMap();
                             client.UpdateOnlineUsers(memberList);
                             if (incomingID.contains("/END")){
                                 break;
@@ -61,14 +57,20 @@ public class ClientHelper extends Thread {
                             coordinator.setId(parts[0]);
                             coordinator.setPort(Integer.valueOf(parts[1]));
                             coordinator.setIp(parts[2]);
+                            coordinator.buildHashMap(); // Set all counters to 0 for each user
 
                             client.updateCoordinatorDetails(coordinator.getId(), coordinator.getPort(), coordinator.getIp());
-
-
+                        } else if (inputStream.equals("/PING")){
+                            System.out.println("RECEIVED THE PING. ATTEMPTING TO SEND PONG");
+                            client.sendClientPong();
                         }
+                        else if (inputStream.contains("/PONG")){
+                            System.out.println("RECEIVED PONG");
+                            coordinator.checkPong(inputStream);
+                        }
+
+
                     }
-                    System.out.println("GOT OUTSIDE LOOP");
-                    System.out.println();
 
                 }
             }
@@ -89,10 +91,9 @@ public class ClientHelper extends Thread {
     }
 
 
-    public ArrayList<String> getAllMembers() throws IOException {
-        in = new Scanner(socket.getInputStream());
-        memberList = new ArrayList<>();
-        return memberList;
+
+    public ArrayList<String> getMemberList(){
+        return this.memberList;
     }
 
     public synchronized boolean getConnected(){
@@ -109,6 +110,10 @@ public class ClientHelper extends Thread {
 
     public synchronized void setInputStream(Scanner inputStream){
         this.in = inputStream;
+    }
+
+    public Coordinator getCoordinator(){
+        return this.coordinator;
     }
 
 

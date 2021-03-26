@@ -2,6 +2,7 @@ package main;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
@@ -32,6 +33,9 @@ public class ServerConnectionHandler extends Thread {
         while(true){
             try {
                 serverSocket = new ServerSocket(this.serverPort);
+                System.out.println(Inet4Address.getLocalHost().getHostAddress());
+
+
                 connection = serverSocket.accept(); // Get connection from client
                 String clientIP = connection.getInetAddress().getHostName();
                 int clientPort = connection.getPort();
@@ -40,6 +44,7 @@ public class ServerConnectionHandler extends Thread {
 
                 // Deals with a new connection by creating a new thread
                 ServerClientHandler initiateConnection = new ServerClientHandler(this, connection);
+                System.out.println("Connection initated with: " + initiateConnection.getID());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -78,6 +83,23 @@ public class ServerConnectionHandler extends Thread {
 
         if (clientList.containsKey(recipient)){
             clientList.get(recipient).sendMessage(sender + ": " + message);
+        }
+    }
+
+    public void pingAllClients(){
+        for (String id : clientList.keySet()){
+            if (!(clientList.get(id).getCoordinator())) {
+                clientList.get(id).sendPingToClient();
+            }
+        }
+    }
+
+    public void pongCoordinator(String messageStream){
+        for (String id : clientList.keySet()){
+            if (clientList.get(id).getCoordinator()) {
+                ServerClientHandler clientHandler = clientList.get(id);
+                clientHandler.sendPongToCoordinator(messageStream);
+            }
         }
     }
 

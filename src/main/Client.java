@@ -98,6 +98,17 @@ public class Client extends Thread {
         this.out.println(sender);
     }
 
+    public void sendClientPing() throws IOException {
+        clientHelper.getCoordinator().checkConnectionStatus();
+    }
+
+    public void sendClientPong(){
+        System.out.println("SENDING PONG");
+        this.out.println("/PONG" + ":" + this.getUserId());
+    }
+
+
+
     public void userQuit(){
         System.out.println("This users id: " + this.getUserId());
         this.out.println("/USERQUIT");
@@ -215,6 +226,10 @@ public class Client extends Thread {
 
     public boolean isTheCoordinator(){
         return isCoordinator;
+    }
+
+    public Socket getSocketInformation(){
+        return this.socket;
     }
 
 

@@ -67,7 +67,6 @@ public class ServerClientHandler extends Thread {
                                 Coordinator coordDetails = connectionToHandler.getCoordinatorObject();
                                 out.println(coordDetails.getId() + ":" + coordDetails.getPort() + ":" + coordDetails.getIp());
 
-
                                 break;
                             }
                         } // ID has been accepted
@@ -75,6 +74,7 @@ public class ServerClientHandler extends Thread {
 
 
                     String messageInputStream = in.nextLine();
+                    System.out.println("INCOMING MESSAGE STREAM " + messageInputStream);
 
                     while(messageInputStream != null){
                         if(messageInputStream.equals("/SENDMESSAGE")){
@@ -87,6 +87,17 @@ public class ServerClientHandler extends Thread {
                             String clientQuitting = in.nextLine();
                             System.out.println("Client quitting: " + clientQuitting);
                             connectionToHandler.removeFromClientList(clientQuitting);
+                        } else if (messageInputStream.equals("/PING")){
+                            connectionToHandler.pingAllClients();
+                            break;
+                        } else if (messageInputStream.contains("/PONG")){
+                            connectionToHandler.pongCoordinator(messageInputStream);
+                            break;
+                        } else if (messageInputStream.contains("/DISCONNECT")){
+                            String parts[] = messageInputStream.split(":");
+                            String id = parts[1];
+                            connectionToHandler.removeFromClientList(id);
+                            break;
                         }
                     }
 
@@ -139,6 +150,14 @@ public class ServerClientHandler extends Thread {
         System.out.println("Sending message: " + message);
         out.println("/RECEIVEMESSAGE");
         out.println(message);
+    }
+
+    public void sendPingToClient(){
+        out.println("/PING");
+    }
+
+    public void sendPongToCoordinator(String inputStream){
+        out.println(inputStream);
     }
 
     public void setID(String id) {
