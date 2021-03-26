@@ -107,9 +107,8 @@ public class Coordinator {
                 out.println("/DISCONNECT" + ":" + i);
             }
 
-            counterMap.keySet().removeIf(k -> counterMap.get(i) > (counterMap.size() + 3));
-
             }
+        counterMap.keySet().removeIf(k -> counterMap.get(k) > (counterMap.size() + 3));
 
         }
 
