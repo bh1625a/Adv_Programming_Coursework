@@ -95,8 +95,9 @@ public class ServerClientHandler extends Thread {
                             break;
                         } else if (messageInputStream.contains("/DISCONNECT")){
                             String parts[] = messageInputStream.split(":");
-                            String id = parts[1];
-                            connectionToHandler.removeFromClientList(id);
+                            String pid = parts[1];
+                            System.out.println("ID in disconnect " + pid);
+                            connectionToHandler.removeFromClientList(pid);
                             break;
                         }
                     }
