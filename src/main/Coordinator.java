@@ -4,6 +4,7 @@ package main;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.TimerTask;
@@ -72,7 +73,16 @@ public class Coordinator {
     }
 
     public void buildHashMap(){
-        for (String member : clientHelper.getMemberList()){
+        ArrayList<String> ids = new ArrayList<>();
+
+
+        for (String m : clientHelper.getMemberList()){
+            String[] parts = m.split(":");
+            String userID = parts[0];
+            ids.add(userID);
+        }
+
+        for (String member : ids){
             counterMap.put(member, 0);
         }
     }
@@ -82,18 +92,17 @@ public class Coordinator {
         String[] parts = inputStream.split(":");
         String userid = parts[1];
 
-        for (String id : counterMap.keySet()){
-            if (userid.equals(id)){
-                counterMap.replace(id, 0);
+        for (String i : counterMap.keySet()){
+            if (i.equals(userid)){
+                System.out.println("I is equal to userid");
+                counterMap.replace(i,0);
+                System.out.println("Countermap value after replace " + counterMap.get(i));
             } else {
-                counterMap.put(id, counterMap.get(id) + 1);
+                counterMap.put(i, counterMap.get(i) + 1);
+                System.out.println("Countermap value in else " + counterMap.get(i));
             }
 
-            if (counterMap.get(id) == 3){
-                out.println("/DISCONNECT" + ":" + id);
-            }
         }
-
 
     }
 

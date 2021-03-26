@@ -61,11 +61,9 @@ public class ClientHelper extends Thread {
 
                             client.updateCoordinatorDetails(coordinator.getId(), coordinator.getPort(), coordinator.getIp());
                         } else if (inputStream.equals("/PING")){
-                            System.out.println("RECEIVED THE PING. ATTEMPTING TO SEND PONG");
                             client.sendClientPong();
                         }
                         else if (inputStream.contains("/PONG")){
-                            System.out.println("RECEIVED PONG");
                             coordinator.checkPong(inputStream);
                         }
 
