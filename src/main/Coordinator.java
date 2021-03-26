@@ -18,6 +18,7 @@ public class Coordinator {
     private Socket socket;
     private PrintWriter out;
     HashMap<String, Integer> counterMap;
+    ArrayList<String> ids;
 
 
     public Coordinator(){
@@ -28,6 +29,7 @@ public class Coordinator {
         this.clientHelper = clientHelper;
         this.client = client;
         this.counterMap = new HashMap<>();
+        this.ids = new ArrayList<>();
     }
 
 
@@ -57,7 +59,6 @@ public class Coordinator {
 
     public void checkConnectionStatus() throws IOException {
         this.socket = client.getSocketInformation();
-        System.out.println("CHECK CONNECTION STATUS REACHED");
         out = new PrintWriter(socket.getOutputStream(),true);
 
         java.util.Timer t = new java.util.Timer();
@@ -73,8 +74,7 @@ public class Coordinator {
     }
 
     public void buildHashMap(){
-        ArrayList<String> ids = new ArrayList<>();
-
+        ids.clear();
 
         for (String m : clientHelper.getMemberList()){
             String[] parts = m.split(":");
@@ -82,9 +82,12 @@ public class Coordinator {
             ids.add(userID);
         }
 
+
         for (String member : ids){
             counterMap.put(member, 0);
         }
+
+
     }
 
     public void checkPong(String inputStream) {
@@ -92,20 +95,20 @@ public class Coordinator {
         String[] parts = inputStream.split(":");
         String userid = parts[1];
 
+
         for (String i : counterMap.keySet()){
             if (i.equals(userid)){
-                System.out.println("I is equal to userid");
                 counterMap.replace(i,0);
-                System.out.println("Countermap value after replace " + counterMap.get(i));
-            } else {
-                counterMap.put(i, counterMap.get(i) + 1);
-                System.out.println("Countermap value in else " + counterMap.get(i));
+            }
+            counterMap.put(i, counterMap.get(i) + 1);
+            if (counterMap.get(i) > (counterMap.size() + 3)){
+                out.println("/DISCONNECT" + ":" + i);
+            }
+
+
             }
 
         }
-
-    }
-
 
 
 

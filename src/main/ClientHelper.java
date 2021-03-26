@@ -40,7 +40,9 @@ public class ClientHelper extends Thread {
                             String incomingID = in.nextLine();
                             System.out.println("IncomingID: " + incomingID);
                             memberList = createIDListFromInput(incomingID);
-//                            coordinator.buildHashMap();
+                            if (memberList.size() > 1) {
+                                coordinator.buildHashMap();
+                            }
                             client.UpdateOnlineUsers(memberList);
                             if (incomingID.contains("/END")){
                                 break;

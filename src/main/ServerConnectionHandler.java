@@ -88,9 +88,7 @@ public class ServerConnectionHandler extends Thread {
 
     public void pingAllClients(){
         for (String id : clientList.keySet()){
-            if (clientList.get(id).getCoordinator()) {
-                clientList.get(id).sendPingToClient();
-            }
+            clientList.get(id).sendPingToClient();
         }
     }
 
