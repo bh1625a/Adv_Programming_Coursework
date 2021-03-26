@@ -66,6 +66,8 @@ public class ServerConnectionHandler extends Thread {
     }
 
     public synchronized void removeFromClientList(String ID){
+        System.out.println("ID in remove from Client List : " + ID);
+        System.out.println(clientList.keySet());
         this.clientList.remove(ID);
         notifyClients();
     }

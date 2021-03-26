@@ -103,6 +103,7 @@ public class Coordinator {
             counterMap.put(i, counterMap.get(i) + 1);
             if (counterMap.get(i) > (counterMap.size() + 3)){
                 out.println("/DISCONNECT" + ":" + i);
+                counterMap.remove(i);
             }
 
 
