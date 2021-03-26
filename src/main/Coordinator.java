@@ -101,11 +101,13 @@ public class Coordinator {
                 counterMap.replace(i,0);
             }
             counterMap.put(i, counterMap.get(i) + 1);
+
+
             if (counterMap.get(i) > (counterMap.size() + 3)){
                 out.println("/DISCONNECT" + ":" + i);
-                counterMap.remove(i);
             }
 
+            counterMap.keySet().removeIf(k -> counterMap.get(i) > (counterMap.size() + 3));
 
             }
 
