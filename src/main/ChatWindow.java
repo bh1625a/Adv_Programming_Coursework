@@ -18,6 +18,7 @@ public class ChatWindow extends Thread implements UIWindow{
     private String msg = "";
     private Client client;
     private ClientHelper clientHelper;
+    private String disconnectedUser = "";
 
 
 
@@ -116,6 +117,7 @@ public class ChatWindow extends Thread implements UIWindow{
                 client.userQuit();
                 System.out.println("Closing window");
                 e.getWindow().dispose();
+                frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
             }
         });
@@ -128,23 +130,19 @@ public class ChatWindow extends Thread implements UIWindow{
             textArea.append(msg);
         })).start();
 
+
+
     }
 
 
     public void displayMembers(ArrayList<String> users) throws IOException {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                listModel.removeAllElements();
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (String id : users){
-                            listModel.addElement(id);
-                        }
-                    }
-                });
-            }
+        new Thread(() -> {
+            listModel.removeAllElements();
+            SwingUtilities.invokeLater(() -> {
+                for (String id : users){
+                    listModel.addElement(id);
+                }
+            });
         }).start();
     }
 

@@ -103,7 +103,6 @@ public class Client extends Thread {
     }
 
     public void sendClientPong(){
-        System.out.println("SENDING PONG");
         this.out.println("/PONG" + ":" + this.getUserId());
     }
 

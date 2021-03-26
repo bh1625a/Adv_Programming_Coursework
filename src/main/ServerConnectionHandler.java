@@ -44,7 +44,7 @@ public class ServerConnectionHandler extends Thread {
 
                 // Deals with a new connection by creating a new thread
                 ServerClientHandler initiateConnection = new ServerClientHandler(this, connection);
-                System.out.println("Connection initated with: " + initiateConnection.getID());
+
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -66,8 +66,6 @@ public class ServerConnectionHandler extends Thread {
     }
 
     public synchronized void removeFromClientList(String ID){
-        System.out.println("ID in remove from Client List : " + ID);
-        System.out.println(clientList.keySet());
         this.clientList.remove(ID);
         notifyClients();
     }
@@ -79,9 +77,6 @@ public class ServerConnectionHandler extends Thread {
     public void sendMessageToUser(String message, String recipient, String sender){
         String parts[] = recipient.split(":");
         recipient = parts[0];
-        System.out.println(clientList.keySet());
-        System.out.println(clientList.containsKey(recipient));
-
 
         if (clientList.containsKey(recipient)){
             clientList.get(recipient).sendMessage(sender + ": " + message);

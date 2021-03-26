@@ -38,7 +38,6 @@ public class ClientHelper extends Thread {
                             }
                         } else if (inputStream.equals("/ALLUSERS")) {
                             String incomingID = in.nextLine();
-                            System.out.println("IncomingID: " + incomingID);
                             memberList = createIDListFromInput(incomingID);
                             if (memberList.size() > 1) {
                                 coordinator.buildHashMap();
@@ -49,7 +48,6 @@ public class ClientHelper extends Thread {
                             }
                         } else if (inputStream.equals("/RECEIVEMESSAGE")){
                             String message = in.nextLine();
-                            System.out.println("Message received by client: " + message);
                             client.UpdateChatWindow(message);
 
                         } else if (inputStream.equals("/SENDCOORDINATORDETAILS")){
@@ -68,7 +66,6 @@ public class ClientHelper extends Thread {
                         else if (inputStream.contains("/PONG")){
                             coordinator.checkPong(inputStream);
                         }
-
 
                     }
 
@@ -115,6 +112,5 @@ public class ClientHelper extends Thread {
     public Coordinator getCoordinator(){
         return this.coordinator;
     }
-
 
 }

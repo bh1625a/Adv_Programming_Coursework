@@ -63,18 +63,15 @@ public class ServerClientHandler extends Thread {
 
                                 connectionToHandler.addToClientList(this.id, this);
                                 out.println("/SENDCOORDINATORDETAILS");
-                                System.out.println(connectionToHandler.getCoordinatorObject().getId());
                                 Coordinator coordDetails = connectionToHandler.getCoordinatorObject();
                                 out.println(coordDetails.getId() + ":" + coordDetails.getPort() + ":" + coordDetails.getIp());
-
                                 break;
                             }
                         } // ID has been accepted
                     }
 
-
                     String messageInputStream = in.nextLine();
-                    System.out.println("INCOMING MESSAGE STREAM " + messageInputStream);
+
 
                     while(messageInputStream != null){
                         if(messageInputStream.equals("/SENDMESSAGE")){
@@ -85,7 +82,7 @@ public class ServerClientHandler extends Thread {
                             break;
                         } else if (messageInputStream.equals("/USERQUIT")){
                             String clientQuitting = in.nextLine();
-                            System.out.println("Client quitting: " + clientQuitting);
+                            //System.out.println("Client quitting: " + clientQuitting);
                             connectionToHandler.removeFromClientList(clientQuitting);
                         } else if (messageInputStream.equals("/PING")){
                             connectionToHandler.pingAllClients();
@@ -96,7 +93,6 @@ public class ServerClientHandler extends Thread {
                         } else if (messageInputStream.contains("/DISCONNECT")){
                             String parts[] = messageInputStream.split(":");
                             String pid = parts[1];
-                            System.out.println("ID in disconnect " + pid);
                             connectionToHandler.removeFromClientList(pid);
                             break;
                         }
@@ -148,7 +144,6 @@ public class ServerClientHandler extends Thread {
     }
 
     public void sendMessage(String message) {
-        System.out.println("Sending message: " + message);
         out.println("/RECEIVEMESSAGE");
         out.println(message);
     }
