@@ -33,7 +33,7 @@ public class ChatWindow extends Thread implements UIWindow{
 
 
         // on close window the close method is called
-        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt)
             {
@@ -41,15 +41,14 @@ public class ChatWindow extends Thread implements UIWindow{
             }
         });
 
-
-        frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_C,KeyEvent.CTRL_DOWN_MASK,false),"EXIT");
+        frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_C,
+                KeyEvent.CTRL_DOWN_MASK,false),"EXIT");
         frame.getRootPane().getActionMap().put("EXIT",new AbstractAction(){
             @Override
             public void actionPerformed(ActionEvent e){
-            //Ensure to add the function to close everything for the user.
+                client.userQuit();
                 frame.dispose();
-                frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                userQuits();
+                System.exit(0);
             }
         });
 

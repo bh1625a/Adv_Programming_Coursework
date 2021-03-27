@@ -2,6 +2,7 @@ package main;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 public class LoginWindow implements UIWindow {
     private JPanel loginPanel;
@@ -18,7 +19,17 @@ public class LoginWindow implements UIWindow {
 
     public LoginWindow(Client client) {
         this.client = client;
+
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        frame.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_C,KeyEvent.CTRL_DOWN_MASK,false),"EXIT");
+        frame.getRootPane().getActionMap().put("EXIT", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+                frame.dispose();
+            }
+        });
 
 
         connectButton.addActionListener(new ActionListener() {
