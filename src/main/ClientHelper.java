@@ -77,6 +77,13 @@ public class ClientHelper extends Thread {
     }
 
     public ArrayList<String> createIDListFromInput(String receivedIDList){
+        /**
+         * Returns an arraylist of currently connected id's
+         * Builds the list from information provided on the input stream
+         * Adds all id's that do not equal "/END"
+         * @param receivedIDList The input stream of id's separated by commas.
+         *
+         */
         ArrayList<String> updatedList = new ArrayList<>();
         String[] parts = receivedIDList.split(",");
         for(String id : parts){
@@ -90,14 +97,26 @@ public class ClientHelper extends Thread {
 
 
     public ArrayList<String> getMemberList(){
+        /**
+         * Returns an ArrayList containing all currently connected id's.
+         * @return this.memberlist The list of currently connected ID's
+         */
         return this.memberList;
     }
 
     public synchronized boolean getConnected(){
+        /**
+         * Returns the current connection state of the client.
+         * Synchonized to work across multiple threads
+         */
         return this.isConnected;
     }
 
     public synchronized void setConnected(boolean value){
+        /**
+         * Sets the connection status for the current client
+         * @param value A boolean depending on the current connection status of the client
+         */
         this.isConnected = value;
     }
 
@@ -106,10 +125,18 @@ public class ClientHelper extends Thread {
     }
 
     public synchronized void setInputStream(Scanner inputStream){
+        /**
+         * Allows the inputStream to be set by the client
+         * @param inputStream The inputStream being set
+          */
         this.in = inputStream;
     }
 
     public Coordinator getCoordinator(){
+        /**
+         * Returns a coordinator object that contains information about the current coordinator
+         * @return this.coordinator The current coordinator
+         */
         return this.coordinator;
     }
 
