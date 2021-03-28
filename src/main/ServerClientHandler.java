@@ -82,7 +82,7 @@ public class ServerClientHandler extends Thread {
                         } else if (messageInputStream.equals("/USERQUIT")){
                             String clientQuitting = in.nextLine();
                             //System.out.println("Client quitting: " + clientQuitting);
-                            changeState(new DisconnectedState(this));
+                            this.state.onQuit();
                             connectionToHandler.removeFromClientList(clientQuitting);
                         } else if (messageInputStream.equals("/PING")){
                             connectionToHandler.pingAllClients();
