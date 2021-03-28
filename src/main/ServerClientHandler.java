@@ -83,6 +83,7 @@ public class ServerClientHandler extends Thread {
                             String clientQuitting = in.nextLine();
                             //System.out.println("Client quitting: " + clientQuitting);
                             this.state.onQuit();
+                            this.connectionToHandler.getConnection().close();
                             connectionToHandler.removeFromClientList(clientQuitting);
                         } else if (messageInputStream.equals("/PING")){
                             connectionToHandler.pingAllClients();
@@ -94,6 +95,7 @@ public class ServerClientHandler extends Thread {
                             String parts[] = messageInputStream.split(":");
                             String pid = parts[1];
                             changeState(new DisconnectedState(this));
+                            this.connectionToHandler.getConnection().close();
                             connectionToHandler.removeFromClientList(pid);
                             break;
                         }
@@ -110,6 +112,10 @@ public class ServerClientHandler extends Thread {
     }
 
     public void notifyUsers(ArrayList<String> userList){
+        /**
+         * Sends a list of all current users over the network
+         * @param userList a list of all currently connected users given by the ServerConnectionHandler
+         */
         String idlist = "";
         out.println("/ALLUSERS");
         System.out.println("Contents of userlist: " + userList);
@@ -120,6 +126,9 @@ public class ServerClientHandler extends Thread {
         out.println(idlist + "/END");
     }
     public void setTheCoordinator(){
+        /**
+         * Sends the coordinator information to client and informs the client to set themselves as the coordinator.
+         */
         out.println("/COORDINATOR");
         connectionToHandler.getCoordinatorObject().setId(currentClientID);
         connectionToHandler.getCoordinatorObject().setPort(currentClientPort);
@@ -133,6 +142,10 @@ public class ServerClientHandler extends Thread {
 
 
     public boolean getCoordinator(){
+        /**
+         * Returns a boolean relating to whether this client is the coordinator
+         * @return Whether the client being handled is the coordinator
+         */
         return this.isCoordinator;
     }
 
