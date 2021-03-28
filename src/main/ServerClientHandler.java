@@ -56,7 +56,6 @@ public class ServerClientHandler extends Thread {
                                 currentClientID = this.id;
                                 currentClientPort = this.connectionSocket.getPort();
                                 currentClientIP = this.connectionSocket.getInetAddress().getHostAddress();
-
                                 if(this.connectionToHandler.listOfUsers().size() == 0){
                                     setTheCoordinator();
                                 }
@@ -83,6 +82,7 @@ public class ServerClientHandler extends Thread {
                         } else if (messageInputStream.equals("/USERQUIT")){
                             String clientQuitting = in.nextLine();
                             //System.out.println("Client quitting: " + clientQuitting);
+                            changeState(new DisconnectedState(this));
                             connectionToHandler.removeFromClientList(clientQuitting);
                         } else if (messageInputStream.equals("/PING")){
                             connectionToHandler.pingAllClients();
@@ -93,6 +93,7 @@ public class ServerClientHandler extends Thread {
                         } else if (messageInputStream.contains("/DISCONNECT")){
                             String parts[] = messageInputStream.split(":");
                             String pid = parts[1];
+                            changeState(new DisconnectedState(this));
                             connectionToHandler.removeFromClientList(pid);
                             break;
                         }
