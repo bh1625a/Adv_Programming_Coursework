@@ -89,6 +89,7 @@ public class Client extends Thread {
                     clientHelper.setConnected(true);
                     clientHelper.setInputStream(in);
                     this.chatWindow.makeMessageAvailable();
+                    this.chatWindow.setWindowTitle(this.id);
                     closeLoginWindow();
                 } else {
                     loginWindow.userNameTakenWarning();

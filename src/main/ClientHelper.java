@@ -37,12 +37,16 @@ public class ClientHelper extends Thread {
 
                             }
                         } else if (inputStream.equals("/ALLUSERS")) {
+                            System.out.println("RECEIVED ALLUSERS COMMAND");
                             String incomingID = in.nextLine();
+                            System.out.println("THE INCOMING ID = " + incomingID);
                             memberList = createIDListFromInput(incomingID);
-                            if (memberList.size() > 1) {
+                            System.out.println("RESULT OF CREATING MEMBERLIST" + memberList);
+                            if (memberList.size() >= 1) {
                                 coordinator.buildHashMap();
                             }
                             client.UpdateOnlineUsers(memberList);
+                            System.out.println("incomingID contains /END " + incomingID.contains("/END"));
                             if (incomingID.contains("/END")){
                                 break;
                             }
@@ -65,6 +69,11 @@ public class ClientHelper extends Thread {
                         }
                         else if (inputStream.contains("/PONG")){
                             coordinator.checkPong(inputStream);
+                        } else if (inputStream.contains("/REMOVEHASH")){
+                            System.out.println("inputStream contains: " + inputStream);
+                            String[] parts = inputStream.split(":");
+                            String id = parts[1];
+                            coordinator.remove(id);
                         }
 
                     }

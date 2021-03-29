@@ -169,4 +169,22 @@ public class ServerConnectionHandler extends Thread {
         return this.coordinator;
     }
 
+    public void changeCoordinator(String previousCoordinator){
+        List keys = new ArrayList(this.clientList.keySet());
+
+        Object key = keys.get(0);
+
+        String coordID = clientList.get(key).getID();
+        int coordPort = clientList.get(key).getCurrentClientPort();
+        String coordIP = clientList.get(key).getCurrentClientIP();
+        ServerClientHandler sch = clientList.get(key);
+        sch.setTheCoordinator(coordID, coordPort, coordIP);
+        createUserList();
+        sch.notifyUsers(idList);
+        sch.sendCoordinatorDetails();
+        System.out.println("Previouscoord in changeCoordinator: " + previousCoordinator);
+        sch.sendRemoveCommand(previousCoordinator);
+
+    }
+
 }

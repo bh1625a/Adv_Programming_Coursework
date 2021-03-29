@@ -136,7 +136,7 @@ public class ChatWindow extends Thread implements UIWindow{
         new Thread(() -> SwingUtilities.invokeLater(() -> {
 //            String msg = "";
             msg += message + "\n";
-            textArea.append(msg);
+            textArea.setText(msg);
         })).start();
 
 
@@ -156,18 +156,23 @@ public class ChatWindow extends Thread implements UIWindow{
     }
 
     public void displayFirstMember(){
-        textArea.setText("You are the first client to join (and have been assigned as coordinator)\n");
+        textArea.append("You have been assigned as coordinator\n");
     }
 
     public void displayCoordinatorInfo(String id, int port, String ip){
         textArea.append("Coordinator is : " + id + " port: " + port + " IP address: " + ip + "\n");
     }
 
+
     public void noIDSelectedWarning(){
         JOptionPane.showMessageDialog(frame,
                 "You have to select an ID from the list",
                 "No user selected",
                 JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void setWindowTitle(String id){
+        frame.setTitle("Chat " + id);
     }
 
 }

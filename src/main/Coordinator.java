@@ -69,7 +69,7 @@ public class Coordinator {
                 out.println("/PING");
 
             }
-        }, 5000, 5000);
+        }, 5000, 10000);
 
     }
 
@@ -87,10 +87,14 @@ public class Coordinator {
             counterMap.put(member, 0);
         }
 
+        System.out.println("Contents of the built hashmap: " + counterMap.keySet());
+
 
     }
 
     public void checkPong(String inputStream) {
+
+        System.out.println("Contents of the countermap = " + counterMap.keySet());
 
         String[] parts = inputStream.split(":");
         String userid = parts[1];
@@ -104,12 +108,17 @@ public class Coordinator {
 
 
             if (counterMap.get(i) > (counterMap.size() + 3)){
+                System.out.println("Result in checkpong: " + counterMap.get(i));
                 out.println("/DISCONNECT" + ":" + i);
             }
 
             }
         counterMap.keySet().removeIf(k -> counterMap.get(k) > (counterMap.size() + 3));
 
+        }
+
+        public void remove(String id){
+            counterMap.remove(id);
         }
 
 

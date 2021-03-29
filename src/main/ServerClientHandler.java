@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class ServerClientHandler extends Thread {
@@ -57,13 +58,11 @@ public class ServerClientHandler extends Thread {
                                 currentClientPort = this.connectionSocket.getPort();
                                 currentClientIP = this.connectionSocket.getInetAddress().getHostAddress();
                                 if(this.connectionToHandler.listOfUsers().size() == 0){
-                                    setTheCoordinator();
+                                    setTheCoordinator(currentClientID, currentClientPort, currentClientIP);
                                 }
 
                                 connectionToHandler.addToClientList(this.id, this);
-                                out.println("/SENDCOORDINATORDETAILS");
-                                Coordinator coordDetails = connectionToHandler.getCoordinatorObject();
-                                out.println(coordDetails.getId() + ":" + coordDetails.getPort() + ":" + coordDetails.getIp());
+                                sendCoordinatorDetails();
                                 break;
                             }
                         } // ID has been accepted
@@ -81,10 +80,17 @@ public class ServerClientHandler extends Thread {
                             break;
                         } else if (messageInputStream.equals("/USERQUIT")){
                             String clientQuitting = in.nextLine();
-                            //System.out.println("Client quitting: " + clientQuitting);
+                            System.out.println("Client quitting: " + clientQuitting);
                             this.state.onQuit();
-                            this.connectionToHandler.getConnection().close();
+                            // If client is the coordinator, set a new one
                             connectionToHandler.removeFromClientList(clientQuitting);
+
+                            if (clientQuitting.equals(this.connectionToHandler.getCoordinatorObject().getId())){
+                                this.connectionToHandler.changeCoordinator(clientQuitting);
+                                break;
+                            }
+
+
                         } else if (messageInputStream.equals("/PING")){
                             connectionToHandler.pingAllClients();
                             break;
@@ -111,6 +117,12 @@ public class ServerClientHandler extends Thread {
 
     }
 
+    public void sendCoordinatorDetails(){
+        out.println("/SENDCOORDINATORDETAILS");
+        Coordinator coordDetails = connectionToHandler.getCoordinatorObject();
+        out.println(coordDetails.getId() + ":" + coordDetails.getPort() + ":" + coordDetails.getIp());
+    }
+
     public void notifyUsers(ArrayList<String> userList){
         /**
          * Sends a list of all current users over the network
@@ -125,16 +137,16 @@ public class ServerClientHandler extends Thread {
 
         out.println(idlist + "/END");
     }
-    public void setTheCoordinator(){
+    public void setTheCoordinator(String id, int port, String ip){
         /**
          * Sends the coordinator information to client and informs the client to set themselves as the coordinator.
          */
         out.println("/COORDINATOR");
-        connectionToHandler.getCoordinatorObject().setId(currentClientID);
-        connectionToHandler.getCoordinatorObject().setPort(currentClientPort);
-        connectionToHandler.getCoordinatorObject().setIp(currentClientIP);
+        connectionToHandler.getCoordinatorObject().setId(id);
+        connectionToHandler.getCoordinatorObject().setPort(port);
+        connectionToHandler.getCoordinatorObject().setIp(ip);
 
-        out.println(currentClientID + ":" + currentClientPort + ":" + currentClientIP);
+        out.println(id + ":" + port + ":" + ip);
 
         out.println("/COORDINATORTRUE");
         isCoordinator = true;
@@ -185,5 +197,9 @@ public class ServerClientHandler extends Thread {
 
     public ConnectionState getConnectionState() {
         return state;
+    }
+
+    public void sendRemoveCommand(String previousCoordinatorID){
+        out.println("/REMOVEHASH" + ":" + previousCoordinatorID);
     }
 }
