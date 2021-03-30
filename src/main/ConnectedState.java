@@ -17,9 +17,6 @@ public class ConnectedState extends ConnectionState {
         return "Disconnected";
     }
 
-    public void sendMessage(){
-
-    }
 
     public String toString(){
         return "Connected";

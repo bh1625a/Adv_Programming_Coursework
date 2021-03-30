@@ -11,18 +11,15 @@ import java.util.Scanner;
 public class ServerClientHandler extends Thread {
     private ServerConnectionHandler connectionToHandler;
     private Socket connectionSocket;
-    private boolean isClientConnected = true;
     private String id = null;
     private Scanner in;
     private PrintWriter out;
     private ConnectionState state;
-    private Client client;
     private String message;
     private String recipient;
     private String currentClientID;
     private Integer currentClientPort;
     private String currentClientIP = "";
-    private ServerClientHandler serverClientHandler;
     private boolean isCoordinator = false;
     private String userListResponse = "";
 

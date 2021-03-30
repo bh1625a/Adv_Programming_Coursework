@@ -153,21 +153,6 @@ public class Client extends Thread {
         return this.listOfLocalAddresses;
     }
 
-    public synchronized void setIsConnected(boolean value){
-        this.isConnected = value;
-    }
-
-    public synchronized boolean isConnected(){
-        return isConnected;
-    }
-
-    public void connectionStatusChange(ConnectionState status){
-
-    }
-
-    public void sendGUIExit(){
-
-    }
 
     public void createListOfLocalAddresses() throws SocketException {
         /**
@@ -177,7 +162,8 @@ public class Client extends Thread {
          *
          */
         this.listOfLocalAddresses.clear();
-        this.listOfLocalAddresses.add("localhost");
+        // Used for debugging
+//        this.listOfLocalAddresses.add("localhost");
         Enumeration e = NetworkInterface.getNetworkInterfaces();
         while(e.hasMoreElements())
         {
