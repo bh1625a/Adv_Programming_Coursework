@@ -13,6 +13,9 @@ public class ConnectedState extends ConnectionState {
 
 
     public String onQuit(){
+        /**
+         * Changes the state of a ConnctionState object within the serverClientHandler to disconnected.
+         */
         ch.changeState(new DisconnectedState(ch));
         return "Disconnected";
     }

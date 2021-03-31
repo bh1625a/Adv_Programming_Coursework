@@ -6,6 +6,9 @@ public class DisconnectedState extends ConnectionState {
     }
 
     public String onJoin(){
+        /**
+         * Changes the state of a ConnectionState object within the ServerClientHandler to connected.
+         */
         this.ch.changeState(new ConnectedState(ch));
         return "Connected";
     }
