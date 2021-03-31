@@ -94,6 +94,7 @@ class CoordinatorTest {
        for (String members: ids){
             counterMap.put(members, 0);
         }
+
         assertEquals(2 ,counterMap.size());
         assertEquals(true , counterMap.containsKey("Benjamin"));
     }
