@@ -1,60 +1,99 @@
 package main;
 
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.*;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PipedReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClientTest {
-    private ClientHelper ch = new ClientHelper();
-    private Client client = new Client(ch);
+    private ClientHelper ch;
+    private Client client;
+    ServerSocket serverSocket;
+    private Socket clientSocket;
+    private Socket connection;
+    private Scanner serverIn;
+    private Scanner clientIn;
+    private PrintWriter serverOut;
+    private PrintWriter clientOut;
 
-    @Test
-    void run() {
+    @BeforeEach
+    public void setup(){
+        ch = new ClientHelper();
+        client = new Client(ch);
+    }
+
+
+
+    @BeforeClass
+    public void initialize() throws IOException {
+//        ch = new ClientHelper();
+//        client = new Client(ch);
+        serverSocket = new ServerSocket(58001);
+        clientSocket = new Socket("192.168.0.7", 58001);
+        connection = serverSocket.accept();
+        serverIn = new Scanner(connection.getInputStream());
+        serverOut = new PrintWriter(connection.getOutputStream(), true);
+        clientIn = new Scanner(clientSocket.getInputStream());
+        clientOut = new PrintWriter(clientSocket.getOutputStream(), true);
+    }
+
+    @After
+    public void tearDown() throws IOException {
+        serverSocket.close();
+        connection.close();
+        clientSocket.close();
     }
 
     @Test
-    void openLoginWindow() {
-    }
-
-    @Test
-    void closeLoginWindow() {
-    }
-
-    @Test
-    void openChatWindow() {
-    }
-
-    @Test
-    void connectToServer() {
-    }
-
-    @Test
-    void sendMessage() {
-        String messageText = "Hello mate";
-        String recipient = "Steve";
+    void sendMessageTest() throws IOException {
+        setup();
+        initialize();
+        clientOut.println("/SENDMESSAGE");
+        String receiveSendMessage = serverIn.nextLine();
+        clientOut.println("Hello mate");
+        String message = serverIn.nextLine();
+        clientOut.println("Steve");
+        String recipient = serverIn.nextLine();
         client.setId("Bob");
-        String sender = client.getUserId();
-        assertEquals("Hello mate", messageText);
+        clientOut.println(client.getUserId());
+        String sender = serverIn.nextLine();
+        assertEquals("/SENDMESSAGE", receiveSendMessage);
+        assertEquals("Hello mate", message);
         assertEquals("Steve", recipient);
         assertEquals("Bob", sender);
+        tearDown();
     }
 
     @Test
-    void sendClientPing() {
+    void sendClientPing() throws IOException {
+        initialize();
+        clientOut.println("/PING");
+        String readPing = serverIn.nextLine();
+        assertEquals("/PING", readPing);
+
     }
 
     @Test
     void sendClientPong() throws IOException {
+        initialize();
         client.setId("Steve");
-        String pong = "/PONG:" + client.getUserId();
+        clientOut.println("/PONG" + ":" + client.getUserId());
+        String pong = serverIn.nextLine();
         assertEquals("/PONG:Steve", pong);
+        tearDown();
     }
 
     @Test
@@ -65,43 +104,13 @@ class ClientTest {
     }
 
     @Test
-    void getListOfLocalAddresses() {
-    }
+    void getListOfLocalAddresses() throws SocketException {
+        client.getListOfLocalAddresses().clear();
+        client.getListOfLocalAddresses().add("192.168.0.3");
+        ArrayList<String> testAddresses = new ArrayList<>();
+        testAddresses.add("192.168.0.3");
+        assertEquals(testAddresses, client.getListOfLocalAddresses());
 
-    @Test
-    void setIsConnected() {
-    }
-
-    @Test
-    void isConnected() {
-    }
-
-    @Test
-    void connectionStatusChange() {
-    }
-
-    @Test
-    void sendGUIExit() {
-    }
-
-    @Test
-    void createListOfLocalAddresses() {
-    }
-
-    @Test
-    void updateChatWindow() {
-    }
-
-    @Test
-    void updateOnlineUsers() {
-    }
-
-    @Test
-    void chatWindowFirstMember() {
-    }
-
-    @Test
-    void updateCoordinatorDetails() {
     }
 
     @Test
@@ -118,6 +127,9 @@ class ClientTest {
 
     @Test
     void checkClientIpAvailable() {
+        client.getListOfLocalAddresses().clear();
+        client.getListOfLocalAddresses().add("192.168.0.3");
+        assertTrue(client.getListOfLocalAddresses().contains("192.168.0.3"));
     }
 
     @Test
@@ -180,8 +192,13 @@ class ClientTest {
         assertTrue(this.client.isTheCoordinator() == true);
     }
 
-    @Test
-    void getSocketInformation() throws IOException {
 
+    @Test
+    void updateCoordinatorDetails() {
+    }
+
+    @Test
+    void getSocketInformation() {
+        client.getSocketInformation();
     }
 }

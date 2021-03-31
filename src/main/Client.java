@@ -174,9 +174,10 @@ public class Client extends Thread {
             {
                 InetAddress i = (InetAddress) ee.nextElement();
                 String hostAddress = i.getHostAddress();
-                if (hostAddress.startsWith("1")){
+                // Filters out IPv6 addresses
+                if (hostAddress.contains(".")){
                     this.listOfLocalAddresses.add(hostAddress);
-            }
+                }
             }
         }
     }
