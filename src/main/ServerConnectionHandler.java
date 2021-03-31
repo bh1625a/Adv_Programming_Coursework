@@ -8,12 +8,13 @@ import java.net.Socket;
 import java.util.*;
 
 public class ServerConnectionHandler extends Thread {
+    /**
+     * Acts as the main connection point for all clients
+     */
     private int serverPort;
     private String serverIP;
     private ServerSocket serverSocket;
     private Socket connection;
-    private Scanner in;
-    private PrintWriter out;
     private HashMap<String, ServerClientHandler> clientList;
     private ArrayList<String> idList = new ArrayList<>();
     private Coordinator coordinator;
@@ -170,6 +171,13 @@ public class ServerConnectionHandler extends Thread {
     }
 
     public void changeCoordinator(String previousCoordinator){
+        /**
+         * Sets the coordinator on the server side to the most recently joined participant if a coordinator leaves
+         * Notifies all users that the coordinator has changed.
+         * Sends a message to the new coordinator to remove the old coordinator from their list of users.
+         *
+         * @param previousCoordinator The id of the previous coordinator
+         */
         List keys = new ArrayList(this.clientList.keySet());
 
         Object key = keys.get(0);
@@ -177,12 +185,12 @@ public class ServerConnectionHandler extends Thread {
         String coordID = clientList.get(key).getID();
         int coordPort = clientList.get(key).getCurrentClientPort();
         String coordIP = clientList.get(key).getCurrentClientIP();
+        // Get the ServerClientHandler object of the new coordinator.
         ServerClientHandler sch = clientList.get(key);
         sch.setTheCoordinator(coordID, coordPort, coordIP);
         createUserList();
         sch.notifyUsers(idList);
         sch.sendCoordinatorDetails();
-        System.out.println("Previouscoord in changeCoordinator: " + previousCoordinator);
         sch.sendRemoveCommand(previousCoordinator);
 
     }

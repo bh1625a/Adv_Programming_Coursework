@@ -58,6 +58,11 @@ public class Coordinator {
     }
 
     public void checkConnectionStatus() throws IOException {
+        /**
+         * Periodically sends a "/PING" message to the server
+         * This is then forwarded to all connected clients for them to respond to.
+         * Sends the /PING every 10 seconds.
+         */
         this.socket = client.getSocketInformation();
         out = new PrintWriter(socket.getOutputStream(),true);
 
@@ -74,6 +79,9 @@ public class Coordinator {
     }
 
     public void buildHashMap(){
+        /**
+         * Creates a hashmap with a counter set to zero for each user that is connected.
+         */
         ids.clear();
 
         for (String m : clientHelper.getMemberList()){
@@ -82,42 +90,48 @@ public class Coordinator {
             ids.add(userID);
         }
 
-
         for (String member : ids){
             counterMap.put(member, 0);
         }
-
-        System.out.println("Contents of the built hashmap: " + counterMap.keySet());
-
-
     }
 
     public void checkPong(String inputStream) {
-
-        System.out.println("Contents of the countermap = " + counterMap.keySet());
-
+        /**
+         * Reads in an inputStream of /PONG messages from each connected user.
+         * If it does not receive a reply from a user it will begin incrementing a count.
+         * If the count exceeds the set limit of the size of the built hashmap plus 3 attempts at communication
+         * it will send a message to the server to disconnect that user
+         *
+         * @param inputStream An input stream received from the server in the format "/PONG:userid"
+         */
         String[] parts = inputStream.split(":");
         String userid = parts[1];
 
 
         for (String i : counterMap.keySet()){
+            // Reset the counter to 0 if the user has sent a /PONG reply
             if (i.equals(userid)){
                 counterMap.replace(i,0);
             }
             counterMap.put(i, counterMap.get(i) + 1);
 
-
+            // Send a message to the server to remove the user from the list of connected users.
             if (counterMap.get(i) > (counterMap.size() + 3)){
-                System.out.println("Result in checkpong: " + counterMap.get(i));
                 out.println("/DISCONNECT" + ":" + i);
             }
 
             }
+        // Removes the user from the coordinators hashmap
         counterMap.keySet().removeIf(k -> counterMap.get(k) > (counterMap.size() + 3));
 
         }
 
         public void remove(String id){
+            /**
+             * This method will remove the id supplied from the counterMap hashmap.
+             * This method is called when a previous coordinator has left the chat.
+             * @param id The id of the previous coordinator
+             */
             counterMap.remove(id);
         }
 

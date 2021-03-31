@@ -94,6 +94,7 @@ public class Client extends Thread {
                     this.chatWindow.setVisible(true);
                 } else {
                     loginWindow.userNameTakenWarning();
+                    // Close the socket so that the port can be reused on subsequent connection attempts
                     socket.close();
                     return;
                 }
@@ -145,7 +146,6 @@ public class Client extends Thread {
         /**
          * Sends a "/USERQUIT" message from the client to the server to inform the server that the client is quitting.
          */
-        System.out.println("This users id: " + this.getUserId());
         this.out.println("/USERQUIT");
         this.out.println(this.getUserId());
     }
