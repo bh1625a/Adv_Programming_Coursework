@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CoordinatorTest {
     private Coordinator coordinator = new Coordinator();
     private ArrayList<String> ids;
-    private ClientHelper ch;
+
 
 
     @Test
