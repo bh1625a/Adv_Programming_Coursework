@@ -91,6 +91,7 @@ public class Client extends Thread {
                     this.chatWindow.makeMessageAvailable();
                     this.chatWindow.setWindowTitle(this.id);
                     closeLoginWindow();
+                    this.chatWindow.setVisible(true);
                 } else {
                     loginWindow.userNameTakenWarning();
                     socket.close();
@@ -103,7 +104,7 @@ public class Client extends Thread {
         } catch (ConnectException cx){
             loginWindow.incorrectServerPortWarning();
         } catch (SocketException se){
-            loginWindow.debuggingWarning();
+            loginWindow.serverIssueWarning();
         } catch (UnknownHostException uhe){
             loginWindow.serverIPNotFoundWarning();
         }

@@ -38,10 +38,16 @@ public class LoginWindow implements UIWindow {
                 boolean fieldsCompleted = validate();
                 if(fieldsCompleted) {
                     try {
+
                         client.setId(idInput.getText());
-                        client.setServerPort(serverPortInput.getText());
+
+                        if (portInRange(serverPortInput.getText()) && portInRange(clientPortInput.getText())){
+                            client.setServerPort(serverPortInput.getText());
+                            client.setClientPort(clientPortInput.getText());
+                        } else {
+                            portOutOfRangeWarning();
+                        }
                         client.setServerAddress(serverIPInput.getText());
-                        client.setClientPort(clientPortInput.getText());
                         client.setClientAddress(clientIPInput.getText());
                         // Attempt to connect to the server using the supplied information
                         client.connectToServer();
@@ -77,6 +83,16 @@ public class LoginWindow implements UIWindow {
 
     /* Error checking and warning dialogs*/
 
+    public boolean portInRange(String portNumber){
+        try {
+            int port = Integer.valueOf(portNumber);
+            return port >= 1024 && port <= 65535;
+        } catch (NumberFormatException nfe){
+            System.out.println("You must enter a number");
+            return false;
+        }
+    }
+
     public boolean validate(){
         int errorCount = 0;
         if (idInput.getText().length() == 0 || clientPortInput.getText().length() == 0
@@ -86,6 +102,13 @@ public class LoginWindow implements UIWindow {
         }
 
         return errorCount == 0;
+    }
+
+    public void portOutOfRangeWarning(){
+        JOptionPane.showMessageDialog(frame,
+                "You have chosen an invalid port number.\nMust be within range 1024-65535",
+                "Port is not in valid range",
+                JOptionPane.WARNING_MESSAGE);
     }
 
     public void clientAddressWarning(){
@@ -123,10 +146,10 @@ public class LoginWindow implements UIWindow {
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    public void debuggingWarning(){
+    public void serverIssueWarning(){
         JOptionPane.showMessageDialog(frame,
-                "This method causes error",
-                "This exception causes error",
+                "Server not running or incorrect server address supplied",
+                "Check Server address",
                 JOptionPane.ERROR_MESSAGE);
     }
 }

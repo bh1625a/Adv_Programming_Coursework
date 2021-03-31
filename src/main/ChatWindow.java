@@ -26,6 +26,7 @@ public class ChatWindow extends Thread implements UIWindow{
         this.client = client;
         listModel = new DefaultListModel();
         userListField.setModel(listModel);
+        frame.setVisible(false);
         userInputField.setEditable(false);
         sendMessageButton.setEnabled(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -107,13 +108,17 @@ public class ChatWindow extends Thread implements UIWindow{
         frame.setContentPane(getPanel());
         frame.pack();
         frame.setSize(500,500);
-        frame.setVisible(true);
+//        frame.setVisible(true);
     }
 
     @Override
     public void closeWindow(){
         frame.setVisible(false);
         frame.dispose();
+    }
+
+    public void setVisible(boolean value){
+        frame.setVisible(value);
     }
 
     @Override
