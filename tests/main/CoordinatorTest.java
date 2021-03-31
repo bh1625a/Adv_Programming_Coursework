@@ -2,10 +2,15 @@ package main;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CoordinatorTest {
     private Coordinator coordinator = new Coordinator();
+    private ArrayList<String> ids;
+    private ClientHelper ch;
+
 
     @Test
     void getId() {
@@ -49,6 +54,7 @@ class CoordinatorTest {
 
     @Test
     void buildHashMap() {
+        
     }
 
     @Test

@@ -14,13 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class ClientTest {
     private ClientHelper ch = new ClientHelper();
     private Client client = new Client(ch);
-    private Socket socket;
-    private PrintWriter out;
-    private OutputStream outputStream;
-    private Scanner in;
-    private ServerSocket serverSocket;
-
-
 
     @Test
     void run() {
@@ -44,6 +37,13 @@ class ClientTest {
 
     @Test
     void sendMessage() {
+        String messageText = "Hello mate";
+        String recipient = "Steve";
+        client.setId("Bob");
+        String sender = client.getUserId();
+        assertEquals("Hello mate", messageText);
+        assertEquals("Steve", recipient);
+        assertEquals("Bob", sender);
     }
 
     @Test
@@ -52,26 +52,16 @@ class ClientTest {
 
     @Test
     void sendClientPong() throws IOException {
-        try {
-            out = new PrintWriter(socket.getOutputStream(), true);
-            client.setId("Ben");
-            out.println("/PONG" + ":" + client.getUserId());
-            in = new Scanner(socket.getInputStream());
-            String inputStream = in.nextLine();
-            String pong = "";
-            if (inputStream.contains("/PONG")) {
-                pong = inputStream;
-            }
-            assertEquals("/PONG:Ben", pong);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+        client.setId("Steve");
+        String pong = "/PONG:" + client.getUserId();
+        assertEquals("/PONG:Steve", pong);
     }
 
     @Test
     void userQuit() {
+        client.setId("John");
+        String userQuitting = "This users id is: " + this.client.getUserId();
+        assertEquals("This users id is: John", userQuitting);
     }
 
     @Test
@@ -132,14 +122,14 @@ class ClientTest {
 
     @Test
     void setServerAddress() {
-        client.setServerAddress("localhost");
-        assertTrue(client.getServerAddress() == "localhost");
+        client.setServerAddress("149.22.9.78");
+        assertTrue(client.getServerAddress() == "149.22.9.78");
     }
 
     @Test
     void getServerAddress() {
-        client.setServerAddress("localhost");
-        assertTrue(client.getServerAddress() == "localhost");
+        client.setServerAddress("149.22.9.78");
+        assertTrue(client.getServerAddress() == "149.22.9.78");
     }
 
     @Test
@@ -156,14 +146,14 @@ class ClientTest {
 
     @Test
     void setClientAddress() {
-        client.setClientAddress("localhost");
-        assertTrue(client.getClientAddress() == "localhost");
+        client.setClientAddress("86.13.37.146");
+        assertTrue(client.getClientAddress() == "86.13.37.146");
     }
 
     @Test
     void getClientAddress() {
-        client.setClientAddress("localhost");
-        assertTrue(client.getClientAddress() == "localhost");
+        client.setClientAddress("86.13.37.146");
+        assertTrue(client.getClientAddress() == "86.13.37.146");
     }
 
     @Test
