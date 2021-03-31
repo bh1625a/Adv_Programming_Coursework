@@ -79,17 +79,28 @@ public class ChatWindow extends Thread implements UIWindow{
         userInputField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String input = userInputField.getText();
-                userInputField.setText("");
-                textArea.append(input);
-                textArea.append("\n");
+                try {
+                    String recipient = (String) userListField.getSelectedValue();
+                    String messageContents = userInputField.getText();
+
+                    if (!(userListField.isSelectionEmpty())) {
+                        userInputField.setText("");
+                        textArea.append("Me: " + messageContents + "\n");
+                    } else {
+                        noIDSelectedWarning();
+                    }
+
+
+                    client.sendMessage(messageContents, recipient);
+                } catch (NullPointerException ne) {
+                    ne.getMessage();
+                }
+
             }
         });
 
 
     }
-
-
 
     @Override
     public void openWindow(){
